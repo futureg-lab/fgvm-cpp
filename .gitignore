@@ -1,3 +1,9 @@
+# Custom
+bin
+obj
+.vs
+TODO.md
+
 # Prerequisites
 *.d
 
