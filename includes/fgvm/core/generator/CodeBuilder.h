@@ -32,8 +32,9 @@ public:
 	~CodeBuilder();
 
 	fgvm::Value* createValue(std::string name, fgvm::Type* content);
-	fgvm::FArgValue* createArg(std::string name, fgvm::EType type_hint_id);
+	fgvm::Value* createArg(std::string name, fgvm::EType type_hint_id);
 	fgvm::Value* createRef(std::string name, fgvm::Value* value);
+	fgvm::Value* createReturn(fgvm::Value* value);
 
 
 	fgvm::Value* createAdd(std::string name, fgvm::Value* L, fgvm::Value* R);

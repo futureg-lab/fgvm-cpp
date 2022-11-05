@@ -3,6 +3,8 @@
 #include "fgvm/core/fgvm.h"
 #include "fgvm/core/utils/IRUtils.h"
 
+#include "fgvm/core/generator/ir-generator/IRSourceGenerator.h"
+
 #include <memory>
 
 using namespace fgvm;
@@ -122,6 +124,18 @@ void sandbox2()
 }
 int main() 
 {
-    sandbox2();
+    // sandbox2();
+
+    auto generator = new IRSourceGenerator();
+    auto s1 = builder->createValue("x", new I32(2));
+    auto s2 = builder->createRef("y",s1);
+    auto ret = builder->createReturn(s2);
+
+    auto s_add = builder->createAdd("res", builder->createValue("a", new I32(4)), builder->createValue("b", new I32(7)));
+
+    std::cout << ((SourceGenerator*)generator)->generate(s1) << std::endl;
+    std::cout << ((SourceGenerator*)generator)->generate(s2) << std::endl;
+    std::cout << ((SourceGenerator*)generator)->generate(ret) << std::endl;
+    std::cout << generator->generate((FunctionCallValue*)s_add) << std::endl;
     return 0;
 }

@@ -23,7 +23,7 @@ const std::string IRUtils::enumTypeToStr(fgvm::EType etype)
     return numIdStr[etype];
 }
 
-fgvm::Type* IRUtils::getTypeById(fgvm::EType type)
+fgvm::Type* IRUtils::getTypeById(fgvm::EType etype)
 {
     using namespace fgvm;
     std::map<unsigned int, fgvm::Type*> numIdPtr = {
@@ -41,6 +41,28 @@ fgvm::Type* IRUtils::getTypeById(fgvm::EType type)
         {EType::Void, new VOID()}
     };
 
-    FGError::ASSERT(numIdPtr.find(type) != numIdPtr.end());
-    return numIdPtr[type];
+    FGError::ASSERT(numIdPtr.find(etype) != numIdPtr.end());
+    return numIdPtr[etype];
+}
+
+std::string IRUtils::join(std::vector<std::string>& list, std::string& sep)
+{
+    std::string res = "";
+    for (size_t i = 0; i < list.size(); i++) {
+        res += list[i];
+        if ((i + 1) <= list.size())
+            res += sep;
+    }
+    return res;
+}
+
+std::string IRUtils::format(const std::string input, std::vector<std::string> params)
+{
+    std::string res = input;
+    int count = 0;
+    for (std::string& str : params) {
+        std::regex reg("\\{" + std::to_string(count++) + "\\}");
+        res = std::regex_replace(res, reg, str);
+    }
+    return res;
 }

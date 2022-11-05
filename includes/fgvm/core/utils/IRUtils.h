@@ -6,12 +6,20 @@
 #include <sstream>
 
 #include <map>
+#include <regex>
+#include <iterator>
 
 #include "../types/AtomicTypes.h"
 
 namespace IRUtils {
     const std::string enumTypeToStr(fgvm::EType etype);
     fgvm::Type* getTypeById(fgvm::EType type);
+    
+    // a1, a2, .. aN => a1 sep a2 sep a3 sep ... sep aN
+    std::string join(std::vector<std::string>& list, std::string& sep);
+
+    // input hello {0} {1}, params = world, ! => hello world !
+    std::string format(const std::string input, std::vector<std::string> params);
 
     template<typename T>
     std::string stringifyPtrValue(void* value);

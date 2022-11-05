@@ -40,7 +40,7 @@ fgvm::Value* CodeBuilder::createValue(std::string name, fgvm::Type* content)
 	return value;
 }
 
-fgvm::FArgValue* CodeBuilder::createArg(std::string name, fgvm::EType type_hint_id)
+fgvm::Value* CodeBuilder::createArg(std::string name, fgvm::EType type_hint_id)
 {
 	fgvm::Type* type = IRUtils::getTypeById(type_hint_id);
 	fgvm::FArgValue* arg = new fgvm::FArgValue(name, type);
@@ -52,6 +52,14 @@ fgvm::Value* CodeBuilder::createRef(std::string name, fgvm::Value* value)
 	fgvm::SARRefValue* ref_value = new fgvm::SARRefValue(name, value);
 	return ref_value;
 }
+
+fgvm::Value* CodeBuilder::createReturn(fgvm::Value* value)
+{
+	fgvm::RetValue* ret = new fgvm::RetValue(value);
+	registerToModuleObjectPool(ret);
+	return ret;
+}
+
 
 
 fgvm::Value* CodeBuilder::createAdd(std::string name, fgvm::Value* L, fgvm::Value* R)
