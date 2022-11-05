@@ -1,5 +1,5 @@
 #pragma once
-#include <stack>
+#include <queue>
 #include "../Statement.h"
 #include "../values/RetValue.h"
 
@@ -10,15 +10,15 @@ namespace fgvm {
 
 		Bloc(std::string name);
 		
-		void setStmt(std::stack<Statement*> statements);
-		std::stack<Statement*> getStmt() const;
+		void setStmt(std::queue<Statement*> statements);
+		std::queue<Statement*> getStmt() const;
 		RetValue* getRetValue() const;
 		void addStmt(Statement* stmt);
 		void setRetValue(RetValue* ret_value);
 
 		virtual EStatementType stmtTypeId() const override;
 	private:
-		std::stack<Statement*> statements;
+		std::queue<Statement*> statements;
 		RetValue* ret_value = nullptr;
 	};
 }

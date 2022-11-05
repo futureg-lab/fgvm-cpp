@@ -1,7 +1,7 @@
 #include "RetValue.h"
 
-fgvm::RetValue::RetValue(std::string name, fgvm::Type* content)
-	: Value(name)
+fgvm::RetValue::RetValue(fgvm::Value* content)
+	: Value("")
 {
 	this->content = content;
 }
@@ -13,5 +13,5 @@ fgvm::EValueType fgvm::RetValue::valueTypeID() const
 
 fgvm::EType fgvm::RetValue::expectedReductionTypeID() const
 {
-	return content->getTypeId();
+	return content->expectedReductionTypeID();
 }

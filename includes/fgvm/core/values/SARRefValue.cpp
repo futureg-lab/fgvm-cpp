@@ -3,7 +3,7 @@
 fgvm::SARRefValue::SARRefValue(std::string name, Value* content)
     : Value(name)
 {
-    this->hold_ref = hold_ref;
+    this->hold_ref = content;
     FGError::NOT_NULL(this->hold_ref);
 }
 
