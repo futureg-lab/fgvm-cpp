@@ -7,12 +7,12 @@ fgvm::Bloc::Bloc(std::string name)
     this->name = name;
 }
 
-void fgvm::Bloc::setStmt(std::stack<Statement*> statements)
+void fgvm::Bloc::setStmt(std::queue<Statement*> statements)
 {
     this->statements = statements;
 }
 
-std::stack<fgvm::Statement*> fgvm::Bloc::getStmt() const
+std::queue<fgvm::Statement*> fgvm::Bloc::getStmt() const
 {
     return statements;
 }

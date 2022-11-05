@@ -7,6 +7,9 @@
     <Filter Include="generator">
       <UniqueIdentifier>{AC378C0D-18A2-4084-61E0-F129CD891ED9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="generator\ir-generator">
+      <UniqueIdentifier>{6A416C27-563B-9579-3FA8-2B8A2B41FBE5}</UniqueIdentifier>
+    </Filter>
     <Filter Include="types">
       <UniqueIdentifier>{5A5E7610-C672-9EC1-8FF4-4121FBC79AF2}</UniqueIdentifier>
     </Filter>
@@ -38,6 +41,12 @@
     </ClInclude>
     <ClInclude Include="generator\Module.h">
       <Filter>generator</Filter>
+    </ClInclude>
+    <ClInclude Include="generator\SourceGenerator.h">
+      <Filter>generator</Filter>
+    </ClInclude>
+    <ClInclude Include="generator\ir-generator\IRSourceGenerator.h">
+      <Filter>generator\ir-generator</Filter>
     </ClInclude>
     <ClInclude Include="types\AtomicTypes.h">
       <Filter>types</Filter>
@@ -89,6 +98,12 @@
     </ClCompile>
     <ClCompile Include="generator\Module.cpp">
       <Filter>generator</Filter>
+    </ClCompile>
+    <ClCompile Include="generator\SourceGenerator.cpp">
+      <Filter>generator</Filter>
+    </ClCompile>
+    <ClCompile Include="generator\ir-generator\IRSourceGenerator.cpp">
+      <Filter>generator\ir-generator</Filter>
     </ClCompile>
     <ClCompile Include="types\AtomicTypes.cpp">
       <Filter>types</Filter>

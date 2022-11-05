@@ -3,17 +3,15 @@
 #include "fgvm/core/fgvm.h"
 #include "fgvm/core/utils/IRUtils.h"
 
+#include <memory>
 
 using namespace fgvm;
 
-Module* mod_container = new Module;
-CodeBuilder* builder = new CodeBuilder(mod_container);
+std::unique_ptr<Module> mod_container = std::make_unique<Module>();
+std::unique_ptr<CodeBuilder> builder = std::make_unique<CodeBuilder>(mod_container.get());
 
 void sandbox1()
 {
-
-    using namespace fgvm;
-
     Value* x = builder->createValue("xxx", new I64(6));
     Value* y = builder->createValue("yyy", new I64(13));
 
@@ -62,12 +60,68 @@ void sandbox1()
 
 }
 
+
+std::string codegen(fgvm::Value* value)
+{
+    std::string src = "";
+    switch (value->valueTypeID())
+    {
+    case EValueType::AssignementID:
+        src += "%" + ((SARValue*)value)->name + " = " + ((SARValue*)value)->content->storedValueAsString();
+        break;
+    case EValueType::FunctionCallID:
+        src += "%" + ((FunctionCallValue*)value)->name + " = " + ((FunctionCallValue*)value)->called_func_name + " I got " + std::to_string(((FunctionCallValue*)value)->arg_inputs.size());
+        break;
+    default:
+        FGError::ASSERT(false);
+    }
+    return src;
+}
+
+std::string codegen(fgvm::Bloc* bloc) 
+{
+    std::string src = bloc->name + ":{";
+
+    auto qstmt = bloc->getStmt();
+    while (!qstmt.empty()) 
+    {
+        Statement* stmt = qstmt.front();
+
+        switch (stmt->stmtTypeId())
+        {
+        case EStatementType::BlocStmt:
+            src += codegen(dynamic_cast<Bloc*>(stmt)) + "\n";
+            break;
+        case EStatementType::ValueStmt:
+            src += codegen(dynamic_cast<Value*>(stmt)) + "\n";
+            break;
+        default:
+            FGError::ASSERT(false); // unhandled
+            break;
+        }
+        qstmt.pop();
+    }
+    src += "}";
+    return src;
+}
+
 void sandbox2()
 {
     using namespace fgvm;
+    Bloc* my_scope = (Bloc*) builder->createBloc("some_bloc");
+    
+    Value* s1 = builder->createValue("x", new I32(2));
+    Value* s2 = builder->createValue("y", new I32(4));
+    Value* s_add = builder->createAdd("res", s1, s2);
+ 
+    my_scope->addStmt(s1);
+    my_scope->addStmt(s2);
+    my_scope->addStmt(s_add);
+
+    std::cout << codegen(my_scope);
 }
 int main() 
 {
-    sandbox1();
+    sandbox2();
     return 0;
 }
