@@ -9,7 +9,8 @@ using namespace fgvm;
 Module* mod_container = new Module;
 CodeBuilder* builder = new CodeBuilder(mod_container);
 
-int main() {
+void sandbox1()
+{
 
     using namespace fgvm;
 
@@ -17,7 +18,7 @@ int main() {
     Value* y = builder->createValue("yyy", new I64(13));
 
     Value* add_res = builder->createAdd("m_res", x, y);
-    
+
     FunctionCallValue* v_add = dynamic_cast<FunctionCallValue*> (add_res);
 
     SARValue* xx = (SARValue*)x;
@@ -36,8 +37,8 @@ int main() {
     std::cout
         << "name : " << v_add->name << "\n"
         << "args : " << v_add->arg_inputs.size() << "\n"
-        << "type ret : " << IRUtils::enumTypeToStr (v_add->expectedReductionTypeID()) << "\n";
-    
+        << "type ret : " << IRUtils::enumTypeToStr(v_add->expectedReductionTypeID()) << "\n";
+
     // Test for bool
     std::cout << "\n** Test for bool **" << "\n";
     BOOL bl(false);
@@ -59,5 +60,14 @@ int main() {
         << "Total bits " << vd.totalBits() << "\n"
         << "value " << vd.storedValueAsString() << std::endl;
 
+}
+
+void sandbox2()
+{
+    using namespace fgvm;
+}
+int main() 
+{
+    sandbox1();
     return 0;
 }

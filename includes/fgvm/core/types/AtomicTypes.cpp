@@ -6,6 +6,11 @@
 // unsigned int
 //
 
+fgvm::U8::U8()
+	: Type(8, EType::Uint8)
+{
+}
+
 // Uint8
 fgvm::U8::U8(uint8_t value)
 	: Type(8, EType::Uint8)
@@ -18,8 +23,13 @@ std::string fgvm::U8::storedValueAsString() const
 	return IRUtils::stringifyPtrValue<uint8_t>(stored_value);
 }
 
-
 // Uint16
+
+fgvm::U16::U16()
+	: Type(16, EType::Uint16)
+{
+}
+
 fgvm::U16::U16(uint16_t value)
 	: Type(16, EType::Uint16)
 {
@@ -32,6 +42,11 @@ std::string fgvm::U16::storedValueAsString() const
 }
 
 // Uint32
+fgvm::U32::U32()
+	: Type(32, EType::Uint16)
+{
+}
+
 fgvm::U32::U32(uint32_t value)
 	: Type(32, EType::Uint32)
 {
@@ -46,8 +61,13 @@ std::string fgvm::U32::storedValueAsString() const
 
 
 // Uint64
+fgvm::U64::U64()
+	: Type(64, EType::Uint64)
+{
+}
+
 fgvm::U64::U64(uint64_t value)
-	: Type(64, EType::Uint16)
+	: Type(64, EType::Uint64)
 {
 	stored_value = IRUtils::makePointerOutOf<uint64_t>(value);
 }
@@ -55,6 +75,13 @@ fgvm::U64::U64(uint64_t value)
 std::string fgvm::U64::storedValueAsString() const
 {
 	return IRUtils::stringifyPtrValue<uint64_t>(stored_value);
+}
+
+
+// INT8
+fgvm::I8::I8()
+	: Type(8, EType::Int8)
+{
 }
 
 fgvm::I8::I8(int8_t value)
@@ -69,7 +96,12 @@ std::string fgvm::I8::storedValueAsString() const
 }
 
 
-// int16
+// INT16
+fgvm::I16::I16()
+	: Type(16, EType::Int16)
+{
+}
+
 fgvm::I16::I16(int16_t value)
 	: Type(16, EType::Int16)
 {
@@ -81,7 +113,12 @@ std::string fgvm::I16::storedValueAsString() const
 	return IRUtils::stringifyPtrValue<int16_t>(stored_value);
 }
 
-// int32
+// INT32
+fgvm::I32::I32()
+	: Type(32, EType::Int32)
+{
+}
+
 fgvm::I32::I32(int32_t value)
 	: Type(32, EType::Int32)
 {
@@ -94,10 +131,14 @@ std::string fgvm::I32::storedValueAsString() const
 	return IRUtils::stringifyPtrValue<int32_t>(&x);
 }
 
+// INT64
+fgvm::I64::I64()
+	: Type(64, EType::Int64)
+{
+}
 
-// int64
 fgvm::I64::I64(int64_t value)
-	: Type(64, EType::Int16)
+	: Type(64, EType::Int64)
 {
 	stored_value = IRUtils::makePointerOutOf<int64_t>(value);
 }
@@ -107,7 +148,12 @@ std::string fgvm::I64::storedValueAsString() const
 	return IRUtils::stringifyPtrValue<int64_t>(stored_value);
 }
 
-// float32
+// FLOAT32
+fgvm::F32::F32()
+	: Type(32, EType::Float32)
+{
+}
+
 fgvm::F32::F32(float value)
 	: Type(32, EType::Float32)
 {
@@ -120,7 +166,12 @@ std::string fgvm::F32::storedValueAsString() const
 }
 
 
-// float64
+// FLOAT64
+fgvm::F64::F64()
+	: Type(64, EType::Float64)
+{
+}
+
 fgvm::F64::F64(double value)
 	: Type(64, EType::Float64)
 {
@@ -133,7 +184,12 @@ std::string fgvm::F64::storedValueAsString() const
 }
 
 
-// float64
+// BOOL
+fgvm::BOOL::BOOL()
+	: Type(1, EType::Bool)
+{
+}
+
 fgvm::BOOL::BOOL(bool value)
 	: Type(1, EType::Bool)
 {
@@ -145,6 +201,11 @@ std::string fgvm::BOOL::storedValueAsString() const
 	return IRUtils::stringifyPtrValue<bool>(stored_value);
 }
 
+
+fgvm::STR::STR()
+	: Type(0, EType::Str)
+{
+}
 
 // Str
 fgvm::STR::STR(const char* value)
@@ -159,7 +220,7 @@ std::string fgvm::STR::storedValueAsString() const
 	size_t len = totalBits() / 8;
 	
 	char* addr = (char*) stored_value;
-	for (int i = 0; i < len; value += addr[i], i++);
+	for (size_t i = 0; i < len; value += addr[i], i++);
 
 	return value;
 }
@@ -174,5 +235,5 @@ fgvm::VOID::VOID()
 
 std::string fgvm::VOID::storedValueAsString() const
 {
-	return "nullptr";
+	return "__void__";
 }

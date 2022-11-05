@@ -1,12 +1,10 @@
 #include "FArgValue.h"
 
 // FArgs
-fgvm::FArgValue::FArgValue(std::string name, Type* content, Module* module_owner)
-	: Value(name, module_owner)
+fgvm::FArgValue::FArgValue(std::string name, Type* content)
+	: Value(name)
 {
 	this->content = content;
-	this->module_owner = module_owner;
-
 	FGError::NOT_NULL(this->content);
 }
 

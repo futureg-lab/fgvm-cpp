@@ -1,7 +1,7 @@
 #include "SARValue.h"
 
-fgvm::SARValue::SARValue(std::string name, Type* content, Module* module_owner)
-    : Value(name, module_owner)
+fgvm::SARValue::SARValue(std::string name, Type* content)
+    : Value(name)
 {
     this->name = name;
     this->content = content;

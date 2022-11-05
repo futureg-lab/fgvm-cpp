@@ -4,15 +4,16 @@
 #include "../Constants.h"
 #include "../generator/Module.h"
 #include "../utils/FGError.h"
+#include "../Statement.h"
 
 namespace fgvm {
-    class Module;
-
-    class Value {
+    class Value : public Statement {
     public:
         std::string name = "";
-        Module* module_owner = nullptr;
-        Value(std::string name, Module* module_owner);
+        Value(std::string name);
+
+        EStatementType stmtTypeId() const override;
+        
         virtual EValueType valueTypeID() const = 0;
         virtual EType expectedReductionTypeID() const = 0;
     };

@@ -3,8 +3,6 @@
 #include "Value.h"
 
 namespace fgvm {
-    class Module;
-
     // %value_name = func_name type args
     class FunctionCallValue : public Value {
     public:
@@ -14,8 +12,7 @@ namespace fgvm {
         FunctionCallValue(
             std::string assign_name,
             std::string called_func_name,
-            std::vector<Value*> arg_inputs,
-            Module* module_owner);
+            std::vector<Value*> arg_inputs);
 
         EValueType valueTypeID() const override;
         EType expectedReductionTypeID() const override;

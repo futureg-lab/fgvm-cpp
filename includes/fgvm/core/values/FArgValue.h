@@ -4,11 +4,10 @@
 #include "Value.h"
 
 namespace fgvm {
-    class Module;
-
     class FArgValue : public Value {
+    public:
         Type* content;
-        FArgValue(std::string name, Type* content, Module* module_owner);
+        FArgValue(std::string name, Type* content);
         EValueType valueTypeID() const override;
         EType expectedReductionTypeID() const override;
     };
