@@ -65,6 +65,11 @@ all: prebuild prelink $(TARGET)
 endif
 
 OBJECTS := \
+	$(OBJDIR)/Statement.o \
+	$(OBJDIR)/Bloc.o \
+	$(OBJDIR)/ConditionalBr.o \
+	$(OBJDIR)/FunctionDef.o \
+	$(OBJDIR)/Loop.o \
 	$(OBJDIR)/CodeBuilder.o \
 	$(OBJDIR)/Module.o \
 	$(OBJDIR)/AtomicTypes.o \
@@ -73,6 +78,8 @@ OBJECTS := \
 	$(OBJDIR)/IRUtils.o \
 	$(OBJDIR)/FArgValue.o \
 	$(OBJDIR)/FunctionCallValue.o \
+	$(OBJDIR)/RetValue.o \
+	$(OBJDIR)/SARRefValue.o \
 	$(OBJDIR)/SARValue.o \
 	$(OBJDIR)/Value.o \
 
@@ -133,6 +140,21 @@ else
 $(OBJECTS): | $(OBJDIR)
 endif
 
+$(OBJDIR)/Statement.o: Statement.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/Bloc.o: blocs/Bloc.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/ConditionalBr.o: blocs/ConditionalBr.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/FunctionDef.o: blocs/FunctionDef.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/Loop.o: blocs/Loop.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/CodeBuilder.o: generator/CodeBuilder.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
@@ -155,6 +177,12 @@ $(OBJDIR)/FArgValue.o: values/FArgValue.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/FunctionCallValue.o: values/FunctionCallValue.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/RetValue.o: values/RetValue.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/SARRefValue.o: values/SARRefValue.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/SARValue.o: values/SARValue.cpp

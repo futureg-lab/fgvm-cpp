@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="blocs">
+      <UniqueIdentifier>{D87F290F-4494-51C0-0D16-F51F79E94DF1}</UniqueIdentifier>
+    </Filter>
     <Filter Include="generator">
       <UniqueIdentifier>{AC378C0D-18A2-4084-61E0-F129CD891ED9}</UniqueIdentifier>
     </Filter>
@@ -16,6 +19,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h" />
+    <ClInclude Include="Statement.h" />
+    <ClInclude Include="blocs\Bloc.h">
+      <Filter>blocs</Filter>
+    </ClInclude>
+    <ClInclude Include="blocs\ConditionalBr.h">
+      <Filter>blocs</Filter>
+    </ClInclude>
+    <ClInclude Include="blocs\FunctionDef.h">
+      <Filter>blocs</Filter>
+    </ClInclude>
+    <ClInclude Include="blocs\Loop.h">
+      <Filter>blocs</Filter>
+    </ClInclude>
     <ClInclude Include="fgvm.h" />
     <ClInclude Include="generator\CodeBuilder.h">
       <Filter>generator</Filter>
@@ -41,6 +57,12 @@
     <ClInclude Include="values\FunctionCallValue.h">
       <Filter>values</Filter>
     </ClInclude>
+    <ClInclude Include="values\RetValue.h">
+      <Filter>values</Filter>
+    </ClInclude>
+    <ClInclude Include="values\SARRefValue.h">
+      <Filter>values</Filter>
+    </ClInclude>
     <ClInclude Include="values\SARValue.h">
       <Filter>values</Filter>
     </ClInclude>
@@ -49,6 +71,19 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Statement.cpp" />
+    <ClCompile Include="blocs\Bloc.cpp">
+      <Filter>blocs</Filter>
+    </ClCompile>
+    <ClCompile Include="blocs\ConditionalBr.cpp">
+      <Filter>blocs</Filter>
+    </ClCompile>
+    <ClCompile Include="blocs\FunctionDef.cpp">
+      <Filter>blocs</Filter>
+    </ClCompile>
+    <ClCompile Include="blocs\Loop.cpp">
+      <Filter>blocs</Filter>
+    </ClCompile>
     <ClCompile Include="generator\CodeBuilder.cpp">
       <Filter>generator</Filter>
     </ClCompile>
@@ -71,6 +106,12 @@
       <Filter>values</Filter>
     </ClCompile>
     <ClCompile Include="values\FunctionCallValue.cpp">
+      <Filter>values</Filter>
+    </ClCompile>
+    <ClCompile Include="values\RetValue.cpp">
+      <Filter>values</Filter>
+    </ClCompile>
+    <ClCompile Include="values\SARRefValue.cpp">
       <Filter>values</Filter>
     </ClCompile>
     <ClCompile Include="values\SARValue.cpp">

@@ -15,15 +15,23 @@ namespace fgvm {
         Float64,
         Bool,
         Str,
-        Void,
-        Ref
+        Void
     };
 
     enum EValueType {
         UnknownID = -1,
         FArgumentID,
         AssignementID,
+        AssignRefID,
         FunctionCallID,
-        BlocID
+        ReturnID
+    };
+
+    enum EStatementType {
+        FunDefStmt,
+        ValueStmt,
+        BlocStmt,
+        IfStmt,
+        LoopStmt
     };
 }

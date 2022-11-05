@@ -88,6 +88,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h" />
+    <ClInclude Include="Statement.h" />
+    <ClInclude Include="blocs\Bloc.h" />
+    <ClInclude Include="blocs\ConditionalBr.h" />
+    <ClInclude Include="blocs\FunctionDef.h" />
+    <ClInclude Include="blocs\Loop.h" />
     <ClInclude Include="fgvm.h" />
     <ClInclude Include="generator\CodeBuilder.h" />
     <ClInclude Include="generator\Module.h" />
@@ -97,10 +102,17 @@
     <ClInclude Include="utils\IRUtils.h" />
     <ClInclude Include="values\FArgValue.h" />
     <ClInclude Include="values\FunctionCallValue.h" />
+    <ClInclude Include="values\RetValue.h" />
+    <ClInclude Include="values\SARRefValue.h" />
     <ClInclude Include="values\SARValue.h" />
     <ClInclude Include="values\Value.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Statement.cpp" />
+    <ClCompile Include="blocs\Bloc.cpp" />
+    <ClCompile Include="blocs\ConditionalBr.cpp" />
+    <ClCompile Include="blocs\FunctionDef.cpp" />
+    <ClCompile Include="blocs\Loop.cpp" />
     <ClCompile Include="generator\CodeBuilder.cpp" />
     <ClCompile Include="generator\Module.cpp" />
     <ClCompile Include="types\AtomicTypes.cpp" />
@@ -109,6 +121,8 @@
     <ClCompile Include="utils\IRUtils.cpp" />
     <ClCompile Include="values\FArgValue.cpp" />
     <ClCompile Include="values\FunctionCallValue.cpp" />
+    <ClCompile Include="values\RetValue.cpp" />
+    <ClCompile Include="values\SARRefValue.cpp" />
     <ClCompile Include="values\SARValue.cpp" />
     <ClCompile Include="values\Value.cpp" />
   </ItemGroup>

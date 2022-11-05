@@ -1,11 +1,7 @@
 #include "FunctionCallValue.h"
 
-fgvm::FunctionCallValue::FunctionCallValue(
-	std::string assign_name,
-	std::string called_func_name,
-	std::vector<Value*> arg_inputs,
-	Module* module_owner)
-	: Value(assign_name, module_owner)
+fgvm::FunctionCallValue::FunctionCallValue(std::string assign_name, std::string called_func_name, std::vector<Value*> arg_inputs)
+	: Value(assign_name)
 {
 	this->called_func_name = called_func_name;
 	this->arg_inputs = arg_inputs;
@@ -18,7 +14,6 @@ fgvm::FunctionCallValue::FunctionCallValue(
 		}
 	}
 }
-
 
 fgvm::EValueType fgvm::FunctionCallValue::valueTypeID() const
 {

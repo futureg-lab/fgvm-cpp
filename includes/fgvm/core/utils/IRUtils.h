@@ -7,8 +7,11 @@
 
 #include <map>
 
+#include "../types/AtomicTypes.h"
+
 namespace IRUtils {
     const std::string enumTypeToStr(fgvm::EType etype);
+    fgvm::Type* getTypeById(fgvm::EType type);
 
     template<typename T>
     std::string stringifyPtrValue(void* value);

@@ -1,9 +1,12 @@
 #include "Value.h"
 
 
-fgvm::Value::Value(std::string name, Module* module_owner)
+fgvm::Value::Value(std::string name)
 {
 	this->name = name;
-	this->module_owner = module_owner;
-	FGError::NOT_NULL(module_owner);
+}
+
+fgvm::EStatementType fgvm::Value::stmtTypeId() const
+{
+	return EStatementType::ValueStmt;
 }
