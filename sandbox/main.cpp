@@ -88,12 +88,14 @@ void testFunc() {
     
     auto s1 = builder->createValue("x", new I32(8));
     auto s2 = builder->createValue("y", new I32(9));
+    auto s3 = builder->createValue("ok", new STR("All ok!"));
     auto res_div = builder->createDiv("res_div", s1, s2);
     auto ret_val = builder->createReturn(res_div);
 
     auto bloc = builder->createBloc("func_body");
     bloc->addStmt(s1);
     bloc->addStmt(s2);
+    bloc->addStmt(s3);
     bloc->addStmt(res_div);
 
     // bloc->addStmt(ret_val); // throw an error

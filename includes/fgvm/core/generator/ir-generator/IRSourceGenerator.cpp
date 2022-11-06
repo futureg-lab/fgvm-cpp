@@ -50,10 +50,15 @@ std::string IRSourceGenerator::generate(fgvm::SARValue* value)
 {
 	std::string src = "%{0} = {1} {2}";
 	std::string type = IRUtils::enumTypeToStr(value->expectedReductionTypeID());
-
+	std::string stored_value = value->content->storedValueAsString();
+	if (value->expectedReductionTypeID() == fgvm::EType::Str) {
+		auto str_content = dynamic_cast<fgvm::STR*>(value->content);
+		type += "<" + std::to_string(str_content->totalBits() / 8u) + ">";
+		stored_value = "\"" + stored_value + "\"";
+	}
 	return IRUtils::format(
 		src,
-		{ value->name, type, value->content->storedValueAsString() }
+		{ value->name, type, stored_value }
 	);
 }
 
