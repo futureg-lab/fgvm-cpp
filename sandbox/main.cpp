@@ -96,7 +96,7 @@ void testFunc() {
     bloc->addStmt(s2);
     bloc->addStmt(res_div);
 
-    // bloc->addStmt(ret_val);
+    // bloc->addStmt(ret_val); // throw an error
     bloc->setRetValue(ret_val);
 
     auto fdef = builder->createFunc("someFunc", args, bloc, EType::Int32);

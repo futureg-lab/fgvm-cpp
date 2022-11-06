@@ -93,7 +93,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="sandbox\hello.cpp" />
+    <ClCompile Include="sandbox\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="includes\fgvm\core\fgvm-core.vcxproj">

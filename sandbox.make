@@ -65,7 +65,7 @@ all: prebuild prelink $(TARGET)
 endif
 
 OBJECTS := \
-	$(OBJDIR)/hello.o \
+	$(OBJDIR)/main.o \
 
 RESOURCES := \
 
@@ -124,7 +124,7 @@ else
 $(OBJECTS): | $(OBJDIR)
 endif
 
-$(OBJDIR)/hello.o: sandbox/hello.cpp
+$(OBJDIR)/main.o: sandbox/main.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
