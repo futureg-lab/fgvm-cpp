@@ -101,8 +101,8 @@ void testFunc() {
 
     auto fdef = builder->createFunc("someFunc", args, bloc, EType::Int32);
 
-    auto generator = std::make_unique<IRSourceGenerator>();
-    std::cout << generator->generate(fdef);
+    IRSourceGenerator generator;
+    std::cout << generator.generate(fdef);
 }
 
 int main() 

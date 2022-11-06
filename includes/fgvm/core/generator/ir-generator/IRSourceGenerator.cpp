@@ -106,7 +106,7 @@ std::string IRSourceGenerator::generate(fgvm::ConditionalBr* if_stmt)
 
 std::string IRSourceGenerator::generate(fgvm::FunctionDef* fn_stmt)
 {
-	std::string src = "@defun {0} %{1} ({2})\n{3}";
+	std::string src = "@defun {0} %{1} ({2}) {3}\n{4}";
 	std::string ret_type = IRUtils::enumTypeToStr(fn_stmt->ret_type);
 	std::string f_name = fn_stmt->name;
 
@@ -115,11 +115,12 @@ std::string IRSourceGenerator::generate(fgvm::FunctionDef* fn_stmt)
 		arg_vec.push_back(generate(arg));
 	
 	std::string f_args = IRUtils::join(arg_vec, ARG_SEP);
+	std::string target_f_bloc = fn_stmt->bloc_def->name;
 	std::string f_body = generate(fn_stmt->bloc_def) + INSTR_SEPARATOR;
 
 	return IRUtils::format(
 		src,
-		{ret_type, f_name, f_args, f_body}
+		{ret_type, f_name, f_args, target_f_bloc, f_body}
 	);
 }
 
