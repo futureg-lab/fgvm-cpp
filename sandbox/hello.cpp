@@ -62,73 +62,12 @@ void sandbox1()
 
 }
 
-
-std::string codegen(fgvm::Value* value)
-{
-    std::string src = "";
-    switch (value->valueTypeID())
-    {
-    case EValueType::AssignementID:
-        src += "%" + ((SARValue*)value)->name + " = " + ((SARValue*)value)->content->storedValueAsString();
-        break;
-    case EValueType::FunctionCallID:
-        src += "%" + ((FunctionCallValue*)value)->name + " = " + ((FunctionCallValue*)value)->called_func_name + " I got " + std::to_string(((FunctionCallValue*)value)->arg_inputs.size());
-        break;
-    default:
-        FGError::ASSERT(false);
-    }
-    return src;
-}
-
-std::string codegen(fgvm::Bloc* bloc) 
-{
-    std::string src = bloc->name + ":{";
-
-    auto qstmt = bloc->getStmt();
-    while (!qstmt.empty()) 
-    {
-        Statement* stmt = qstmt.front();
-
-        switch (stmt->stmtTypeId())
-        {
-        case EStatementType::BlocStmt:
-            src += codegen(dynamic_cast<Bloc*>(stmt)) + "\n";
-            break;
-        case EStatementType::ValueStmt:
-            src += codegen(dynamic_cast<Value*>(stmt)) + "\n";
-            break;
-        default:
-            FGError::ASSERT(false); // unhandled
-            break;
-        }
-        qstmt.pop();
-    }
-    src += "}";
-    return src;
-}
-
 void sandbox2()
 {
     using namespace fgvm;
-    Bloc* my_scope = (Bloc*) builder->createBloc("some_bloc");
-    
-    Value* s1 = builder->createValue("x", new I32(2));
-    Value* s2 = builder->createValue("y", new I32(4));
-    Value* s_add = builder->createAdd("res", s1, s2);
- 
-    my_scope->addStmt(s1);
-    my_scope->addStmt(s2);
-    my_scope->addStmt(s_add);
-
-    std::cout << codegen(my_scope);
-}
-int main() 
-{
-    // sandbox2();
-
     auto generator = new IRSourceGenerator();
     auto s1 = builder->createValue("x", new I32(2));
-    auto s2 = builder->createRef("y",s1);
+    auto s2 = builder->createRef("y", s1);
     auto ret = builder->createReturn(s2);
 
     auto s_add = builder->createAdd("res", builder->createValue("a", new I32(4)), builder->createValue("b", new I32(7)));
@@ -137,5 +76,38 @@ int main()
     std::cout << ((SourceGenerator*)generator)->generate(s2) << std::endl;
     std::cout << ((SourceGenerator*)generator)->generate(ret) << std::endl;
     std::cout << generator->generate((FunctionCallValue*)s_add) << std::endl;
+}
+
+void testFunc() {
+    using namespace fgvm;
+
+    std::vector<FArgValue*> args = {
+        builder->createArg("x", EType::Int32),
+        builder->createArg("y", EType::Int32)
+    };
+    
+    auto s1 = builder->createValue("x", new I32(8));
+    auto s2 = builder->createValue("y", new I32(9));
+    auto res_div = builder->createDiv("res_div", s1, s2);
+    auto ret_val = builder->createReturn(res_div);
+
+    auto bloc = builder->createBloc("func_body");
+    bloc->addStmt(s1);
+    bloc->addStmt(s2);
+    bloc->addStmt(res_div);
+
+    // bloc->addStmt(ret_val);
+    bloc->setRetValue(ret_val);
+
+    auto fdef = builder->createFunc("someFunc", args, bloc, EType::Int32);
+
+    auto generator = std::make_unique<IRSourceGenerator>();
+    std::cout << generator->generate(fdef);
+}
+
+int main() 
+{
+    // sandbox2();
+    testFunc();
     return 0;
 }

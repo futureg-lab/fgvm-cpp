@@ -33,27 +33,27 @@ CodeBuilder::~CodeBuilder()
 
 
 // public methods
-fgvm::Value* CodeBuilder::createValue(std::string name, fgvm::Type* content)
+fgvm::SARValue* CodeBuilder::createValue(std::string name, fgvm::Type* content)
 {
 	auto value = new fgvm::SARValue(name, content);
 	registerToSymbolTable(value);
 	return value;
 }
 
-fgvm::Value* CodeBuilder::createArg(std::string name, fgvm::EType type_hint_id)
+fgvm::FArgValue* CodeBuilder::createArg(std::string name, fgvm::EType type_hint_id)
 {
 	fgvm::Type* type = IRUtils::getTypeById(type_hint_id);
 	fgvm::FArgValue* arg = new fgvm::FArgValue(name, type);
 	return arg;
 }
 
-fgvm::Value* CodeBuilder::createRef(std::string name, fgvm::Value* value)
+fgvm::SARRefValue* CodeBuilder::createRef(std::string name, fgvm::Value* value)
 {
 	fgvm::SARRefValue* ref_value = new fgvm::SARRefValue(name, value);
 	return ref_value;
 }
 
-fgvm::Value* CodeBuilder::createReturn(fgvm::Value* value)
+fgvm::RetValue* CodeBuilder::createReturn(fgvm::Value* value)
 {
 	fgvm::RetValue* ret = new fgvm::RetValue(value);
 	registerToModuleObjectPool(ret);
@@ -82,15 +82,15 @@ fgvm::Value* CodeBuilder::createMult(std::string name, fgvm::Value* L, fgvm::Val
 	return createBinaryFunc("mult", name, L, R);
 }
 
-fgvm::Statement* CodeBuilder::createFunc(std::string name, std::vector<fgvm::FArgValue*> args, fgvm::Bloc* bloc)
+fgvm::FunctionDef* CodeBuilder::createFunc(std::string name, std::vector<fgvm::FArgValue*> args, fgvm::Bloc* bloc, fgvm::EType exp_ret_type)
 {
-	fgvm::FunctionDef* def = new fgvm::FunctionDef(name, args, bloc, fgvm::EType::Void);
+	fgvm::FunctionDef* def = new fgvm::FunctionDef(name, args, bloc, exp_ret_type);
 	FGError::ASSERT(def->ret_type == bloc->getRetValue()->expectedReductionTypeID());
 	registerToModuleObjectPool(def);
 	return def;
 }
 
-fgvm::Statement* CodeBuilder::createBloc(std::string name)
+fgvm::Bloc* CodeBuilder::createBloc(std::string name)
 {
 	fgvm::Bloc* bloc = new fgvm::Bloc(name);
 	registerToModuleObjectPool(bloc);

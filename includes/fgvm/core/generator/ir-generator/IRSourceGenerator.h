@@ -8,6 +8,7 @@ class IRSourceGenerator : public SourceGenerator
 {
 private:
 	std::string SEPARATOR = " ";
+	std::string ARG_SEP = ", ";
 	std::string INSTR_SEPARATOR = "\n";
 	std::string INDENT = "   ";
 public:
@@ -46,9 +47,9 @@ public:
 	// \@bloc not_ok : { ret i32 %y }
 	std::string generate(fgvm::ConditionalBr* stmt) override;
 
-	// Idea : \@defun func_name (T3 %a1, T3 %a2, ..., TN aN) target_bloc_name
+	// Idea : \@defun type func_name (T3 %a1, T3 %a2, ..., TN aN) target_bloc_name
 	// Example :
-	// \@defun custom_add(i32 %x, i64 %y) cadd_bloc
+	// \@defun i32 custom_add(i32 %x, i64 %y) cadd_bloc
 	// \@bloc cadd_bloc { ... ... }
 	std::string generate(fgvm::FunctionDef* stmt) override;
 

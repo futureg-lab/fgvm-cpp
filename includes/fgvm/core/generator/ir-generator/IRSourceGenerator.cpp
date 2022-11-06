@@ -57,22 +57,80 @@ std::string IRSourceGenerator::generate(fgvm::SARValue* value)
 	);
 }
 
-std::string IRSourceGenerator::generate(fgvm::Bloc* stmt)
+std::string IRSourceGenerator::generate(fgvm::Bloc* bloc)
 {
-	return std::string();
+	std::string src = "@bloc {0}: {\n{1}\n}";
+	std::vector<std::string> body_str;
+	std::queue<fgvm::Statement*> qstmt = bloc->getStmt();
+	while (!qstmt.empty()) {
+		auto item = qstmt.front();
+		body_str.push_back(dynamic_cast<SourceGenerator*>(this)->generate(item));
+		qstmt.pop();
+	}
+
+	auto ret_value = bloc->getRetValue();
+	if (ret_value)
+		body_str.push_back(generate(ret_value));
+
+	return IRUtils::format(
+		src,
+		{bloc->name, IRUtils::join(body_str, INSTR_SEPARATOR)}
+	);
 }
 
-std::string IRSourceGenerator::generate(fgvm::ConditionalBr* stmt)
+std::string IRSourceGenerator::generate(fgvm::ConditionalBr* if_stmt)
 {
-	return std::string();
+	std::string src = "@if %{0} {1} {2}";
+
+	std::string cond_var = if_stmt->condition->name;
+	auto true_bloc = if_stmt->true_bloc;
+	auto else_bloc = if_stmt->else_bloc;
+
+
+	if (else_bloc == nullptr) {
+		src = "@if %{0} {1}";
+		return IRUtils::format(
+			src,
+			{ cond_var, generate(true_bloc) + INSTR_SEPARATOR }
+		);
+	}
+
+	std::string bloc_a = generate(true_bloc) + INSTR_SEPARATOR;
+	std::string bloc_b = generate(else_bloc) + INSTR_SEPARATOR;
+
+	return IRUtils::format(
+		src, 
+		{ cond_var, bloc_a, bloc_b }
+	);
 }
 
-std::string IRSourceGenerator::generate(fgvm::FunctionDef* stmt)
+std::string IRSourceGenerator::generate(fgvm::FunctionDef* fn_stmt)
 {
-	return std::string();
+	std::string src = "@defun {0} %{1} ({2})\n{3}";
+	std::string ret_type = IRUtils::enumTypeToStr(fn_stmt->ret_type);
+	std::string f_name = fn_stmt->name;
+
+	std::vector<std::string> arg_vec;
+	for (auto arg : fn_stmt->arguments)
+		arg_vec.push_back(generate(arg));
+	
+	std::string f_args = IRUtils::join(arg_vec, ARG_SEP);
+	std::string f_body = generate(fn_stmt->bloc_def) + INSTR_SEPARATOR;
+
+	return IRUtils::format(
+		src,
+		{ret_type, f_name, f_args, f_body}
+	);
 }
 
-std::string IRSourceGenerator::generate(fgvm::Loop* stmt)
+std::string IRSourceGenerator::generate(fgvm::Loop* loop_stmt)
 {
-	return std::string();
+	std::string src = "@loop %{0} {1}\n{2}";
+	std::string cond_var = loop_stmt->condition->name;
+	std::string bloc_name = loop_stmt->loop_bloc->name;
+	std::string l_bloc = generate(loop_stmt->loop_bloc) + INSTR_SEPARATOR;
+	return IRUtils::format(
+		src,
+		{cond_var, bloc_name, bloc_name, l_bloc}
+	);
 }

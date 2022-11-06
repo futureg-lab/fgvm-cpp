@@ -50,7 +50,7 @@ std::string IRUtils::join(std::vector<std::string>& list, std::string& sep)
     std::string res = "";
     for (size_t i = 0; i < list.size(); i++) {
         res += list[i];
-        if ((i + 1) <= list.size())
+        if ((i + 1) < list.size())
             res += sep;
     }
     return res;

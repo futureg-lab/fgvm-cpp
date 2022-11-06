@@ -31,10 +31,10 @@ public:
 	CodeBuilder(fgvm::Module* module_container);
 	~CodeBuilder();
 
-	fgvm::Value* createValue(std::string name, fgvm::Type* content);
-	fgvm::Value* createArg(std::string name, fgvm::EType type_hint_id);
-	fgvm::Value* createRef(std::string name, fgvm::Value* value);
-	fgvm::Value* createReturn(fgvm::Value* value);
+	fgvm::SARValue* createValue(std::string name, fgvm::Type* content);
+	fgvm::FArgValue* createArg(std::string name, fgvm::EType type_hint_id);
+	fgvm::SARRefValue* createRef(std::string name, fgvm::Value* value);
+	fgvm::RetValue* createReturn(fgvm::Value* value);
 
 
 	fgvm::Value* createAdd(std::string name, fgvm::Value* L, fgvm::Value* R);
@@ -42,6 +42,6 @@ public:
 	fgvm::Value* createDiv(std::string name, fgvm::Value* L, fgvm::Value* R);
 	fgvm::Value* createMult(std::string name, fgvm::Value* L, fgvm::Value* R);
 
-	fgvm::Statement* createFunc(std::string name, std::vector<fgvm::FArgValue*> args, fgvm::Bloc* bloc);
-	fgvm::Statement* createBloc(std::string name);
+	fgvm::FunctionDef* createFunc(std::string name, std::vector<fgvm::FArgValue*> args, fgvm::Bloc* bloc, fgvm::EType exp_ret_type);
+	fgvm::Bloc* createBloc(std::string name);
 };
