@@ -4,6 +4,7 @@
 #include "fgvm/core/utils/IRUtils.h"
 
 #include "fgvm/core/generator/ir-generator/IRSourceGenerator.h"
+#include "fgvm/core/analytic-tools/Lexer.h"
 
 #include <memory>
 
@@ -122,11 +123,31 @@ void testFunc() {
     std::cout << generator.generate(fdef);
 }
 
+
+void testLexer() {
+    class CustomLexer : public Lexer {
+    public:
+        CustomLexer(std::string source, std::string filepath)
+            : Lexer(source, filepath) {}
+    };
+
+    std::string file = "<sandbox>";
+    std::string source = "hello world does it \"work\" 123.65";
+
+    CustomLexer lexer(source, file);
+    auto res = lexer.tokenize();
+    std::cout << "N tokens " << res.size() << std::endl;
+    for (auto& token : res) {
+        std::cout << token.to_string() << std::endl;
+    }
+}
+
 int main() 
 {
-    // sandbox2();
     try {
-        testFunc();
+        // sandbox2();
+        // testFunc();
+        testLexer();
     }
     catch (std::logic_error err) {
         std::cerr << "Oups !\n";

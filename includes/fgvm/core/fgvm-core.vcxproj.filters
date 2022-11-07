@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="analytic-tools">
+      <UniqueIdentifier>{B85D7638-A42B-6A3E-8DBF-DA64792C46A3}</UniqueIdentifier>
+    </Filter>
     <Filter Include="blocs">
       <UniqueIdentifier>{D87F290F-4494-51C0-0D16-F51F79E94DF1}</UniqueIdentifier>
     </Filter>
@@ -23,6 +26,15 @@
   <ItemGroup>
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Statement.h" />
+    <ClInclude Include="analytic-tools\Lexer.h">
+      <Filter>analytic-tools</Filter>
+    </ClInclude>
+    <ClInclude Include="analytic-tools\Parser.h">
+      <Filter>analytic-tools</Filter>
+    </ClInclude>
+    <ClInclude Include="analytic-tools\Token.h">
+      <Filter>analytic-tools</Filter>
+    </ClInclude>
     <ClInclude Include="blocs\Bloc.h">
       <Filter>blocs</Filter>
     </ClInclude>
@@ -84,6 +96,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Statement.cpp" />
+    <ClCompile Include="analytic-tools\Lexer.cpp">
+      <Filter>analytic-tools</Filter>
+    </ClCompile>
+    <ClCompile Include="analytic-tools\Parser.cpp">
+      <Filter>analytic-tools</Filter>
+    </ClCompile>
+    <ClCompile Include="analytic-tools\Token.cpp">
+      <Filter>analytic-tools</Filter>
+    </ClCompile>
     <ClCompile Include="blocs\Bloc.cpp">
       <Filter>blocs</Filter>
     </ClCompile>

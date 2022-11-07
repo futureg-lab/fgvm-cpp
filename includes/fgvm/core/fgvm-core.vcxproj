@@ -89,6 +89,9 @@
   <ItemGroup>
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Statement.h" />
+    <ClInclude Include="analytic-tools\Lexer.h" />
+    <ClInclude Include="analytic-tools\Parser.h" />
+    <ClInclude Include="analytic-tools\Token.h" />
     <ClInclude Include="blocs\Bloc.h" />
     <ClInclude Include="blocs\ConditionalBr.h" />
     <ClInclude Include="blocs\FunctionDef.h" />
@@ -112,6 +115,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Statement.cpp" />
+    <ClCompile Include="analytic-tools\Lexer.cpp" />
+    <ClCompile Include="analytic-tools\Parser.cpp" />
+    <ClCompile Include="analytic-tools\Token.cpp" />
     <ClCompile Include="blocs\Bloc.cpp" />
     <ClCompile Include="blocs\ConditionalBr.cpp" />
     <ClCompile Include="blocs\FunctionDef.cpp" />
