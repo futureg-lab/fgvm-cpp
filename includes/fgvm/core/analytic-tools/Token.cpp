@@ -21,6 +21,6 @@ fgvm::Token::Token(int type, char value, CursorPosition cursor, std::string desc
 
 std::string fgvm::Token::to_string()
 {
-    std::string str = "token {0}, type = {1} {2}, start at {3}";
+    std::string str = "token \"{0}\", type = {1} {2}, start at {3}";
     return IRUtils::format(str, {value, std::to_string(type), description, std::to_string(cursor.pos)});
 }

@@ -66,6 +66,9 @@ endif
 
 OBJECTS := \
 	$(OBJDIR)/Statement.o \
+	$(OBJDIR)/Lexer.o \
+	$(OBJDIR)/Parser.o \
+	$(OBJDIR)/Token.o \
 	$(OBJDIR)/Bloc.o \
 	$(OBJDIR)/ConditionalBr.o \
 	$(OBJDIR)/FunctionDef.o \
@@ -144,6 +147,15 @@ $(OBJECTS): | $(OBJDIR)
 endif
 
 $(OBJDIR)/Statement.o: Statement.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/Lexer.o: analytic-tools/Lexer.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/Parser.o: analytic-tools/Parser.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/Token.o: analytic-tools/Token.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Bloc.o: blocs/Bloc.cpp

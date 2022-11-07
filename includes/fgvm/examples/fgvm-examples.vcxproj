@@ -87,11 +87,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="brainfuck\Brainfuck.h" />
+    <ClInclude Include="brainfuck\BrainfLexer.h" />
+    <ClInclude Include="brainfuck\BrainfParser.h" />
     <ClInclude Include="fg-script\FGLexer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="brainfuck\Brainfuck.cpp" />
+    <ClCompile Include="brainfuck\BrainfLexer.cpp" />
+    <ClCompile Include="brainfuck\BrainfParser.cpp" />
     <ClCompile Include="fg-script\FGLexer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

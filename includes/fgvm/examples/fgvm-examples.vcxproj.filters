@@ -9,7 +9,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="brainfuck\Brainfuck.h">
+    <ClInclude Include="brainfuck\BrainfLexer.h">
+      <Filter>brainfuck</Filter>
+    </ClInclude>
+    <ClInclude Include="brainfuck\BrainfParser.h">
       <Filter>brainfuck</Filter>
     </ClInclude>
     <ClInclude Include="fg-script\FGLexer.h">
@@ -17,7 +20,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="brainfuck\Brainfuck.cpp">
+    <ClCompile Include="brainfuck\BrainfLexer.cpp">
+      <Filter>brainfuck</Filter>
+    </ClCompile>
+    <ClCompile Include="brainfuck\BrainfParser.cpp">
       <Filter>brainfuck</Filter>
     </ClCompile>
     <ClCompile Include="fg-script\FGLexer.cpp">

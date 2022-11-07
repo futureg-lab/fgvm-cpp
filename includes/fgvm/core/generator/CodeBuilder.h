@@ -20,36 +20,40 @@
 
 #include "../utils/IRUtils.h"
 
-class CodeBuilder {
-private:
-	fgvm::Value* createBinaryFunc(std::string fcall_name, std::string name, fgvm::Value* L, fgvm::Value* R);
-	fgvm::Value* createUnaryFunc(std::string fcall_name, std::string name, fgvm::Value* input);
-	void registerToModuleObjectPool(fgvm::Statement* value);
-	void registerToSymbolTable(fgvm::Value* value);
-public:
-	fgvm::Module* module_container = nullptr;
+namespace fgvm {
+	class CodeBuilder {
+	private:
+		fgvm::Value* createBinaryFunc(std::string fcall_name, std::string name, fgvm::Value* L, fgvm::Value* R);
+		fgvm::Value* createUnaryFunc(std::string fcall_name, std::string name, fgvm::Value* input);
+		void registerToModuleObjectPool(fgvm::Statement* value);
+		void registerToSymbolTable(fgvm::Value* value);
+	public:
+		fgvm::Module* module_container = nullptr;
 
-	CodeBuilder(fgvm::Module* module_container);
-	~CodeBuilder();
+		CodeBuilder(fgvm::Module* module_container);
+		~CodeBuilder();
 
-	fgvm::SARValue* createValue(std::string name, fgvm::Type* content);
-	fgvm::FArgValue* createArg(std::string name, fgvm::EType type_hint_id);
+		fgvm::SARValue* createValue(std::string name, fgvm::Type* content);
+		fgvm::FArgValue* createArg(std::string name, fgvm::EType type_hint_id);
 
-	fgvm::SARRefValue* createRef(std::string name, fgvm::Value* value);
-	// handling memory
-	fgvm::Value* createAlloc(std::string name, fgvm::Value* mem_size);
-	fgvm::Value* createGetRefAt(std::string name, fgvm::SARRefValue* ref, fgvm::Value* offset);
-	fgvm::Value* createSetRef(std::string name, fgvm::Value* ref_or_addr, fgvm::Value* value);
-	
-	fgvm::RetValue* createReturn(fgvm::Value* value);
+		fgvm::SARRefValue* createRef(std::string name, fgvm::Value* value);
+		// handling memory
+		fgvm::Value* createAlloc(std::string name, fgvm::Value* mem_size);
+		fgvm::Value* createGetRefAt(std::string name, fgvm::SARRefValue* ref, fgvm::Value* offset);
+		fgvm::Value* createSetRef(std::string name, fgvm::Value* ref_or_addr, fgvm::Value* value);
+
+		fgvm::RetValue* createReturn(fgvm::Value* value);
 
 
-	fgvm::Value* createAdd(std::string name, fgvm::Value* L, fgvm::Value* R);
-	fgvm::Value* createSub(std::string name, fgvm::Value* L, fgvm::Value* R);
-	fgvm::Value* createDiv(std::string name, fgvm::Value* L, fgvm::Value* R);
-	fgvm::Value* createMult(std::string name, fgvm::Value* L, fgvm::Value* R);
-	fgvm::Value* createDeref(std::string name, fgvm::SARRefValue* ref);
+		fgvm::Value* createAdd(std::string name, fgvm::Value* L, fgvm::Value* R);
+		fgvm::Value* createSub(std::string name, fgvm::Value* L, fgvm::Value* R);
+		fgvm::Value* createDiv(std::string name, fgvm::Value* L, fgvm::Value* R);
+		fgvm::Value* createMult(std::string name, fgvm::Value* L, fgvm::Value* R);
+		fgvm::Value* createDeref(std::string name, fgvm::SARRefValue* ref);
 
-	fgvm::FunctionDef* createFunc(std::string name, std::vector<fgvm::FArgValue*> args, fgvm::Bloc* bloc, fgvm::EType exp_ret_type);
-	fgvm::Bloc* createBloc(std::string name);
-};
+		fgvm::FunctionDef* createFunc(std::string name, std::vector<fgvm::FArgValue*> args, fgvm::Bloc* bloc, fgvm::EType exp_ret_type);
+		fgvm::Bloc* createBloc(std::string name);
+		fgvm::ConditionalBr* createIF(fgvm::Value* condition, fgvm::Bloc* if_bloc, fgvm::Bloc* else_bloc);
+		fgvm::Loop* createLoop(fgvm::Value* condition, fgvm::Bloc* bloc);
+	};
+}

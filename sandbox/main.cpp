@@ -7,6 +7,7 @@
 #include "fgvm/core/analytic-tools/Lexer.h"
 
 #include "fgvm/examples/fg-script/FGLexer.h"
+#include "fgvm/examples/brainfuck/BrainfLexer.h"
 
 #include <memory>
 
@@ -93,7 +94,7 @@ void testFunc() {
     auto s2 = builder->createValue("test2", new I32(9));
     auto s3 = builder->createValue("ok", new STR("All ok!"));
     auto s4 = builder->createRef("m_ref", s3);
-    auto s5 = builder->createDeref("deref", s4);
+    auto s5 = builder->createDeref("deref", s4); 
     auto res_div = builder->createDiv("res_div", args[0], args[1]);
     auto ret_val = builder->createReturn(res_div);
 
@@ -102,6 +103,14 @@ void testFunc() {
     auto alloc_mem = builder->createAlloc("alloc", alloc_size);
     auto set_ref = builder->createSetRef("same_ref", alloc_mem, s1);
 
+    // test bool if and loop
+    auto test_bool = builder->createValue("m_bool", new BOOL(false));
+
+    auto if_bloc = builder->createBloc("if_bloc");
+    if_bloc->addStmt(builder->createValue("m_bool", new BOOL(false)));
+    auto t_void = builder->createValue("void", new VOID());
+    if_bloc->setRetValue(builder->createReturn(t_void));
+    // auto if_stmt = builder->createIF(test_bool, if_bloc, nullptr);
 
     // setup the call chain
     auto bloc = builder->createBloc("func_body");
@@ -113,6 +122,7 @@ void testFunc() {
     bloc->addStmt(alloc_size);
     bloc->addStmt(alloc_mem);
     bloc->addStmt(set_ref);
+    bloc->addStmt(if_bloc);
     bloc->addStmt(res_div);
 
     // bloc->addStmt(ret_val); // throws an error
@@ -157,13 +167,28 @@ void testLexer2() {
     }
 }
 
+
+void testLexerBrainfuck() {
+    using namespace Brainf_ck;
+    std::string file = "<sandbox>";
+    std::string source = ",+++-[>++.<-]";
+
+    BrainfLexer lexer(source, file);
+    auto res = lexer.tokenize();
+    std::cout << "N tokens " << res.size() << std::endl;
+    for (auto& token : res) {
+        std::cout << token.to_string() << std::endl;
+    }
+}
+
 int main() 
 {
     try {
         // sandbox2();
-        // testFunc();
+        testFunc();
         // testLexer1();
-        testLexer2();
+        // testLexer2();
+        // testLexerBrainfuck();
     }
     catch (std::logic_error err) {
         std::cerr << "Oups !\n";
