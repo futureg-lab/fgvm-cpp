@@ -66,6 +66,9 @@
     <ClInclude Include="values\FunctionCallValue.h">
       <Filter>values</Filter>
     </ClInclude>
+    <ClInclude Include="values\FunctionCustomCallValue.h">
+      <Filter>values</Filter>
+    </ClInclude>
     <ClInclude Include="values\RetValue.h">
       <Filter>values</Filter>
     </ClInclude>
@@ -121,6 +124,9 @@
       <Filter>values</Filter>
     </ClCompile>
     <ClCompile Include="values\FunctionCallValue.cpp">
+      <Filter>values</Filter>
+    </ClCompile>
+    <ClCompile Include="values\FunctionCustomCallValue.cpp">
       <Filter>values</Filter>
     </ClCompile>
     <ClCompile Include="values\RetValue.cpp">

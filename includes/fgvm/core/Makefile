@@ -80,6 +80,7 @@ OBJECTS := \
 	$(OBJDIR)/IRUtils.o \
 	$(OBJDIR)/FArgValue.o \
 	$(OBJDIR)/FunctionCallValue.o \
+	$(OBJDIR)/FunctionCustomCallValue.o \
 	$(OBJDIR)/RetValue.o \
 	$(OBJDIR)/SARRefValue.o \
 	$(OBJDIR)/SARValue.o \
@@ -185,6 +186,9 @@ $(OBJDIR)/FArgValue.o: values/FArgValue.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/FunctionCallValue.o: values/FunctionCallValue.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/FunctionCustomCallValue.o: values/FunctionCustomCallValue.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/RetValue.o: values/RetValue.cpp

@@ -9,6 +9,13 @@ fgvm::Value* CodeBuilder::createBinaryFunc(std::string fcall_name, std::string n
 	return fcall;
 }
 
+fgvm::Value* CodeBuilder::createUnaryFunc(std::string fcall_name, std::string name, fgvm::Value* input)
+{
+	auto fcall = new fgvm::FunctionCallValue(name, fcall_name, { input });
+	registerToSymbolTable(fcall);
+	return fcall;
+}
+
 void CodeBuilder::registerToModuleObjectPool(fgvm::Statement* addr)
 {
 	this->module_container->addPool(addr);
@@ -55,6 +62,34 @@ fgvm::SARRefValue* CodeBuilder::createRef(std::string name, fgvm::Value* value)
 	return ref_value;
 }
 
+fgvm::Value* CodeBuilder::createAlloc(std::string name, fgvm::Value* mem_size)
+{
+	if (mem_size->expectedReductionTypeID() != fgvm::EType::Uint32) {
+		auto expected = fgvm::EType::Uint32;
+		auto got = mem_size->expectedReductionTypeID();
+		throw FGError::typeMismatch("invalid allocation query", expected, got);
+	}
+	auto fcall = createUnaryFunc("alloc", name, mem_size);
+	return fcall;
+}
+
+fgvm::Value* CodeBuilder::createGetRefAt(std::string name, fgvm::SARRefValue* ref, fgvm::Value* offset)
+{
+	auto fcall = createBinaryFunc("ref_offset", name, ref, offset);
+	return fcall;
+}
+
+fgvm::Value* CodeBuilder::createSetRef(std::string name, fgvm::Value* ref_or_addr, fgvm::Value* value)
+{
+	if (ref_or_addr->expectedReductionTypeID() != fgvm::EType::Uint32) {
+		auto expected = fgvm::EType::Uint32;
+		auto got = ref_or_addr->expectedReductionTypeID();
+		throw FGError::typeMismatch("invalid reference address type reduction", expected, got);
+	}
+	auto fcustomcall = new fgvm::FunctionCustomCallValue(name, "set_ref", { ref_or_addr, value }, fgvm::EType::Uint32);
+	return fcustomcall;
+}
+
 fgvm::RetValue* CodeBuilder::createReturn(fgvm::Value* value)
 {
 	fgvm::RetValue* ret = new fgvm::RetValue(value);
@@ -95,17 +130,13 @@ fgvm::FunctionDef* CodeBuilder::createFunc(std::string name, std::vector<fgvm::F
 {
 	fgvm::FunctionDef* def = new fgvm::FunctionDef(name, args, bloc, exp_ret_type);
 	
-	if (bloc->getRetValue() == nullptr) {
-		std::string ret_expected = IRUtils::enumTypeToStr(def->ret_type);
-		std::string what = "invalid return type for {0}, {1} expected, got nothing instead";
-		throw std::logic_error(IRUtils::format(what, {name, ret_expected}));
-	}
+	if (bloc->getRetValue() == nullptr)
+		throw FGError::invalidReturn("function " + name, def->ret_type, fgvm::EType::Unknown);
 
 	if (def->ret_type != bloc->getRetValue()->expectedReductionTypeID()) {
-		std::string ret_expected = IRUtils::enumTypeToStr(def->ret_type);
-		std::string ret_gotten = IRUtils::enumTypeToStr(bloc->getRetValue()->expectedReductionTypeID());
-		std::string what = "invalid return type for {0}, {1} expected, got {2} instead";
-		throw std::logic_error(IRUtils::format(what, { name, ret_expected, ret_gotten }));
+		auto exp = def->ret_type;
+		auto got = bloc->getRetValue()->expectedReductionTypeID();
+		throw FGError::typeMismatch("function " + name, exp, got);
 	}
 
 	registerToModuleObjectPool(def);

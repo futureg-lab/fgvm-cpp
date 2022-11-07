@@ -13,7 +13,7 @@ std::string IRSourceGenerator::generate(fgvm::FArgValue* value)
 	return IRUtils::format("{0} {1}", {type, value->name});
 }
 
-std::string IRSourceGenerator::generate(fgvm::FunctionCallValue* value)
+std::string IRSourceGenerator::generate(fgvm::FunctionCustomCallValue* value)
 {
 	std::string src = "%{0} = {1} {2} {3}";
 	std::string type = IRUtils::enumTypeToStr(value->expectedReductionTypeID());

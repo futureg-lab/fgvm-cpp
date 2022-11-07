@@ -43,7 +43,6 @@ T IRUtils::strToValue(std::string str)
 template<typename T>
 std::string IRUtils::stringifyPtrValue(void* value)
 {
-    FGError::NOT_NULL(value);
     return std::to_string(*static_cast<T*>(value));
 }
 

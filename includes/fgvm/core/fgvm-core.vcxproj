@@ -104,6 +104,7 @@
     <ClInclude Include="utils\IRUtils.h" />
     <ClInclude Include="values\FArgValue.h" />
     <ClInclude Include="values\FunctionCallValue.h" />
+    <ClInclude Include="values\FunctionCustomCallValue.h" />
     <ClInclude Include="values\RetValue.h" />
     <ClInclude Include="values\SARRefValue.h" />
     <ClInclude Include="values\SARValue.h" />
@@ -125,6 +126,7 @@
     <ClCompile Include="utils\IRUtils.cpp" />
     <ClCompile Include="values\FArgValue.cpp" />
     <ClCompile Include="values\FunctionCallValue.cpp" />
+    <ClCompile Include="values\FunctionCustomCallValue.cpp" />
     <ClCompile Include="values\RetValue.cpp" />
     <ClCompile Include="values\SARRefValue.cpp" />
     <ClCompile Include="values\SARValue.cpp" />

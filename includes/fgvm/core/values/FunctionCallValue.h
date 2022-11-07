@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Value.h"
 #include "SARRefValue.h"
+#include "FunctionCustomCallValue.h"
 
 namespace fgvm {
     // %value_name = func_name type args
-    class FunctionCallValue : public Value {
+    class FunctionCallValue : public FunctionCustomCallValue {
     public:
         std::string called_func_name;
         std::vector<Value*> arg_inputs;

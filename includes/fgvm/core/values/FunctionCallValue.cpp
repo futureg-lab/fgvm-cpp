@@ -1,7 +1,7 @@
 #include "FunctionCallValue.h"
 
 fgvm::FunctionCallValue::FunctionCallValue(std::string assign_name, std::string called_func_name, std::vector<Value*> arg_inputs)
-	: Value(assign_name)
+	: FunctionCustomCallValue(assign_name, called_func_name, arg_inputs, fgvm::EType::Void)
 {
 	this->called_func_name = called_func_name;
 	this->arg_inputs = arg_inputs;
@@ -10,9 +10,13 @@ fgvm::FunctionCallValue::FunctionCallValue(std::string assign_name, std::string 
 		EType expected = arg_inputs[0]->expectedReductionTypeID();
 		for (auto arg : arg_inputs) {
 			FGError::NOT_NULL(arg);
-			FGError::ASSERT(expected == arg->expectedReductionTypeID());
+			if (expected != arg->expectedReductionTypeID())
+				throw FGError::typeMismatch("argument not of the same type", expected, arg->expectedReductionTypeID());
 		}
 	}
+	
+	// set return type
+	setReductionTypeId(arg_inputs[0]->expectedReductionTypeID());
 }
 
 fgvm::EValueType fgvm::FunctionCallValue::valueTypeID() const

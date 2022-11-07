@@ -23,6 +23,7 @@
 class CodeBuilder {
 private:
 	fgvm::Value* createBinaryFunc(std::string fcall_name, std::string name, fgvm::Value* L, fgvm::Value* R);
+	fgvm::Value* createUnaryFunc(std::string fcall_name, std::string name, fgvm::Value* input);
 	void registerToModuleObjectPool(fgvm::Statement* value);
 	void registerToSymbolTable(fgvm::Value* value);
 public:
@@ -33,7 +34,13 @@ public:
 
 	fgvm::SARValue* createValue(std::string name, fgvm::Type* content);
 	fgvm::FArgValue* createArg(std::string name, fgvm::EType type_hint_id);
+
 	fgvm::SARRefValue* createRef(std::string name, fgvm::Value* value);
+	// handling memory
+	fgvm::Value* createAlloc(std::string name, fgvm::Value* mem_size);
+	fgvm::Value* createGetRefAt(std::string name, fgvm::SARRefValue* ref, fgvm::Value* offset);
+	fgvm::Value* createSetRef(std::string name, fgvm::Value* ref_or_addr, fgvm::Value* value);
+	
 	fgvm::RetValue* createReturn(fgvm::Value* value);
 
 

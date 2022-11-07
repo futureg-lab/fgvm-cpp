@@ -23,7 +23,8 @@ public:
 	// Idea : %var_name = out_type [$]fname arg1 arg2 ... arg3
 	// Example 1 : %x = i32 add %z %y
 	// Example 2 : %x = str $custom_fmt %my_str %my_val
-	std::string generate(fgvm::FunctionCallValue* value) override;
+	// Supports FunctionCustomCallValue and FunctionCallValue
+	std::string generate(fgvm::FunctionCustomCallValue* value) override;
 
 	// Idea : ret type %var
 	// Example : ret i32 %x

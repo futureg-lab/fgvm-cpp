@@ -94,12 +94,22 @@ void testFunc() {
     auto res_div = builder->createDiv("res_div", args[0], args[1]);
     auto ret_val = builder->createReturn(res_div);
 
+    // test custom call
+    auto alloc_size = builder->createValue("alloc_size", new U32(6));
+    auto alloc_mem = builder->createAlloc("alloc", alloc_size);
+    auto set_ref = builder->createSetRef("same_ref", alloc_mem, s1);
+
+
+    // setup the call chain
     auto bloc = builder->createBloc("func_body");
     bloc->addStmt(s1);
     bloc->addStmt(s2);
     bloc->addStmt(s3);
     bloc->addStmt(s4);
     bloc->addStmt(s5);
+    bloc->addStmt(alloc_size);
+    bloc->addStmt(alloc_mem);
+    bloc->addStmt(set_ref);
     bloc->addStmt(res_div);
 
     // bloc->addStmt(ret_val); // throws an error

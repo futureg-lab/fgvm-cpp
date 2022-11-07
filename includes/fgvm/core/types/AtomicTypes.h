@@ -5,8 +5,8 @@
 #include <cstring>
 #include <vector>
 
-#include "../values/Value.h"
 #include "Type.h"
+#include "../values/Value.h"
 
 
 namespace fgvm {
