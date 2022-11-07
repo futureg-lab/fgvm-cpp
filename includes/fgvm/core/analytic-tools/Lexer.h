@@ -7,13 +7,16 @@
 
 namespace fgvm {
 	class Lexer {
+	private:
+		char STOP_CHAR = '\0';
 	protected:
-		char current_char = '\0';
+		char current_char = STOP_CHAR;
 		std::string source = "";
 		std::string filepath = "";
 		CursorPosition cursor;
 		void nextChar();
 		char peekNextChar() const;
+		bool hasEnded() const;
 
 		// standard string : "hello world!"
 		std::string makeString();

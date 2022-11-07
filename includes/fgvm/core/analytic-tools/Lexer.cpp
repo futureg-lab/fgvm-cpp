@@ -24,6 +24,11 @@ char fgvm::Lexer::peekNextChar() const
     return cursor.pos + 1 >= (int)source.size() ? '\0' : source[cursor.pos + 1];
 }
 
+bool fgvm::Lexer::hasEnded() const
+{
+    return current_char == STOP_CHAR;
+}
+
 std::string fgvm::Lexer::makeString()
 {
     std::string str = "";
@@ -73,7 +78,7 @@ std::vector<fgvm::Token> fgvm::Lexer::tokenize()
 {
     std::vector<Token> tokens;
     nextChar();
-    while (current_char != '\0') {
+    while (!hasEnded()) {
         Token token(0, current_char, cursor, "no description");
         tokens.push_back(token);
         nextChar();
