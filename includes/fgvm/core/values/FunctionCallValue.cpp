@@ -24,5 +24,9 @@ fgvm::EType fgvm::FunctionCallValue::expectedReductionTypeID() const
 {
 	if (arg_inputs.size() == 0)
 		return EType::Void;
+	if (arg_inputs[0]->valueTypeID() == fgvm::AssignRefID) {
+		fgvm::SARRefValue* ref = dynamic_cast<fgvm::SARRefValue*>(arg_inputs[0]);
+		return ref->derefValue()->expectedReductionTypeID();
+	}
 	return arg_inputs[0]->expectedReductionTypeID();
 }

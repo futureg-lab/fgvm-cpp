@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Value.h"
+#include "SARRefValue.h"
 
 namespace fgvm {
     // %value_name = func_name type args

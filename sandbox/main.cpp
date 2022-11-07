@@ -86,19 +86,24 @@ void testFunc() {
         builder->createArg("y", EType::Int32)
     };
     
-    auto s1 = builder->createValue("x", new I32(8));
-    auto s2 = builder->createValue("y", new I32(9));
+    auto s1 = builder->createValue("test", new I32(8));
+    auto s2 = builder->createValue("test2", new I32(9));
     auto s3 = builder->createValue("ok", new STR("All ok!"));
-    auto res_div = builder->createDiv("res_div", s1, s2);
+    auto s4 = builder->createRef("m_ref", s3);
+    auto s5 = builder->createDeref("deref", s4);
+    auto res_div = builder->createDiv("res_div", args[0], args[1]);
     auto ret_val = builder->createReturn(res_div);
 
     auto bloc = builder->createBloc("func_body");
     bloc->addStmt(s1);
     bloc->addStmt(s2);
     bloc->addStmt(s3);
+    bloc->addStmt(s4);
+    bloc->addStmt(s5);
     bloc->addStmt(res_div);
 
-    // bloc->addStmt(ret_val); // throw an error
+    // bloc->addStmt(ret_val); // throws an error
+    // bloc->setRetValue(builder->createReturn(s4)); // throws an error
     bloc->setRetValue(ret_val);
 
     auto fdef = builder->createFunc("someFunc", args, bloc, EType::Int32);
@@ -110,6 +115,15 @@ void testFunc() {
 int main() 
 {
     // sandbox2();
-    testFunc();
+    try {
+        testFunc();
+    }
+    catch (std::logic_error err) {
+        std::cerr << "Oups !\n";
+        std::cerr << "Logic error : " << err.what();
+    }
+    catch (std::exception err) {
+        std::cerr << "Exception : " << err.what();
+    }
     return 0;
 }

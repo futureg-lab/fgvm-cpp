@@ -41,6 +41,7 @@ public:
 	fgvm::Value* createSub(std::string name, fgvm::Value* L, fgvm::Value* R);
 	fgvm::Value* createDiv(std::string name, fgvm::Value* L, fgvm::Value* R);
 	fgvm::Value* createMult(std::string name, fgvm::Value* L, fgvm::Value* R);
+	fgvm::Value* createDeref(std::string name, fgvm::SARRefValue* ref);
 
 	fgvm::FunctionDef* createFunc(std::string name, std::vector<fgvm::FArgValue*> args, fgvm::Bloc* bloc, fgvm::EType exp_ret_type);
 	fgvm::Bloc* createBloc(std::string name);
