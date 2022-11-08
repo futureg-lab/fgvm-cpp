@@ -19,6 +19,12 @@ std::queue<fgvm::Statement*> fgvm::Bloc::getStmt() const
 
 void fgvm::Bloc::addStmt(Statement* stmt)
 {
+    FGError::NOT_NULL(stmt);
+    if (stmt->stmtTypeId() == fgvm::EStatementType::ValueStmt) {
+        auto value = dynamic_cast<fgvm::Value*>(stmt);
+        if (value->valueTypeID() == fgvm::EValueType::ReturnID)
+            throw std::logic_error("Cannot add return object to statment list, use setRetValue instead");
+    }
     statements.push(stmt);
 }
 

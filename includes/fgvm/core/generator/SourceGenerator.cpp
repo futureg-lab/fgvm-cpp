@@ -22,8 +22,12 @@ std::string SourceGenerator::generate(fgvm::Statement* statement)
 		src = generate(dynamic_cast<fgvm::FunctionDef*>(statement));
 		break;
 	}
-	
-	FGError::NOT_EMPTY(src);
+	if (src.empty()) {
+		if (statement)
+			throw FGError::notExpected("source generation is undefined for Statement type " + statement->stmtTypeId());
+		else
+			throw FGError::notExpected("source generation is undefined for the NULL statement");
+	}
 	return src;
 }
 
@@ -42,7 +46,10 @@ std::string SourceGenerator::generate(fgvm::Value* value)
 		src = generate(dynamic_cast<fgvm::FArgValue*>(value));
 		break;
 	case fgvm::EValueType::FunctionCallID:
-		src = generate(dynamic_cast<fgvm::FunctionCallValue*>(value));
+		src = generate(dynamic_cast<fgvm::FunctionCustomCallValue*>(value));
+		break;
+	case fgvm::EValueType::FunctionCustomCallID:
+		src = generate(dynamic_cast<fgvm::FunctionCustomCallValue*>(value));
 		break;
 	case fgvm::EValueType::ReturnID:
 		src = generate(dynamic_cast<fgvm::RetValue*>(value));
@@ -51,6 +58,11 @@ std::string SourceGenerator::generate(fgvm::Value* value)
 		break;
 	}
 
-	FGError::NOT_EMPTY(src);
+	if (src.empty()) {
+		if (value)
+			throw FGError::notExpected("source generation is undefined for Value type " + std::to_string(value->valueTypeID()));
+		else
+			throw FGError::notExpected("source generation is undefined for the NULL value");
+	}
 	return src;
 }

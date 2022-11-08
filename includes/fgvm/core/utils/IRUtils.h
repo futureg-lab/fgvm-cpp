@@ -18,7 +18,7 @@ namespace IRUtils {
     // a1, a2, .. aN => a1 sep a2 sep a3 sep ... sep aN
     std::string join(std::vector<std::string>& list, std::string& sep);
 
-    // input hello {0} {1}, params = world, ! => hello world !
+    // input "hello {0} {1"}, params = "world", "!" => "hello world !"
     std::string format(const std::string input, std::vector<std::string> params);
 
     template<typename T>
@@ -43,7 +43,6 @@ T IRUtils::strToValue(std::string str)
 template<typename T>
 std::string IRUtils::stringifyPtrValue(void* value)
 {
-    FGError::NOT_NULL(value);
     return std::to_string(*static_cast<T*>(value));
 }
 

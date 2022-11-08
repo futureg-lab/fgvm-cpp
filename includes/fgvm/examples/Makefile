@@ -65,7 +65,9 @@ all: prebuild prelink $(TARGET)
 endif
 
 OBJECTS := \
-	$(OBJDIR)/Brainfuck.o \
+	$(OBJDIR)/BrainfLexer.o \
+	$(OBJDIR)/BrainfParser.o \
+	$(OBJDIR)/FGLexer.o \
 
 RESOURCES := \
 
@@ -124,7 +126,13 @@ else
 $(OBJECTS): | $(OBJDIR)
 endif
 
-$(OBJDIR)/Brainfuck.o: brainfuck/Brainfuck.cpp
+$(OBJDIR)/BrainfLexer.o: brainfuck/BrainfLexer.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/BrainfParser.o: brainfuck/BrainfParser.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/FGLexer.o: fg-script/FGLexer.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 

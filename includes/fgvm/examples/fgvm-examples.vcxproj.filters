@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="brainfuck">
+      <UniqueIdentifier>{5ABDCFE6-C627-845D-0F66-35037B0F62B2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fg-script">
+      <UniqueIdentifier>{74F0AB05-E05A-607C-2999-112295423ED1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="brainfuck\BrainfLexer.h">
+      <Filter>brainfuck</Filter>
+    </ClInclude>
+    <ClInclude Include="brainfuck\BrainfParser.h">
+      <Filter>brainfuck</Filter>
+    </ClInclude>
+    <ClInclude Include="fg-script\FGLexer.h">
+      <Filter>fg-script</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="brainfuck\BrainfLexer.cpp">
+      <Filter>brainfuck</Filter>
+    </ClCompile>
+    <ClCompile Include="brainfuck\BrainfParser.cpp">
+      <Filter>brainfuck</Filter>
+    </ClCompile>
+    <ClCompile Include="fg-script\FGLexer.cpp">
+      <Filter>fg-script</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

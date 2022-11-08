@@ -2,6 +2,7 @@
 
 #include "../values/Value.h"
 #include "../values/FunctionCallValue.h"
+#include "../values/FunctionCustomCallValue.h"
 #include "../values/SARValue.h"
 #include "../values/SARRefValue.h"
 #include "../values/FArgValue.h"
@@ -24,7 +25,7 @@ public:
 	std::string generate(fgvm::Value* value);
 
 	virtual std::string generate(fgvm::FArgValue* value) = 0;
-	virtual std::string generate(fgvm::FunctionCallValue* value) = 0;
+	virtual std::string generate(fgvm::FunctionCustomCallValue* value) = 0;
 	virtual std::string generate(fgvm::RetValue* value) = 0;
 	virtual std::string generate(fgvm::SARRefValue* value) = 0;
 	virtual std::string generate(fgvm::SARValue* value) = 0;

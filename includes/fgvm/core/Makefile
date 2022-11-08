@@ -66,6 +66,9 @@ endif
 
 OBJECTS := \
 	$(OBJDIR)/Statement.o \
+	$(OBJDIR)/Lexer.o \
+	$(OBJDIR)/Parser.o \
+	$(OBJDIR)/Token.o \
 	$(OBJDIR)/Bloc.o \
 	$(OBJDIR)/ConditionalBr.o \
 	$(OBJDIR)/FunctionDef.o \
@@ -80,6 +83,7 @@ OBJECTS := \
 	$(OBJDIR)/IRUtils.o \
 	$(OBJDIR)/FArgValue.o \
 	$(OBJDIR)/FunctionCallValue.o \
+	$(OBJDIR)/FunctionCustomCallValue.o \
 	$(OBJDIR)/RetValue.o \
 	$(OBJDIR)/SARRefValue.o \
 	$(OBJDIR)/SARValue.o \
@@ -145,6 +149,15 @@ endif
 $(OBJDIR)/Statement.o: Statement.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/Lexer.o: analytic-tools/Lexer.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/Parser.o: analytic-tools/Parser.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/Token.o: analytic-tools/Token.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Bloc.o: blocs/Bloc.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
@@ -185,6 +198,9 @@ $(OBJDIR)/FArgValue.o: values/FArgValue.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/FunctionCallValue.o: values/FunctionCallValue.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/FunctionCustomCallValue.o: values/FunctionCustomCallValue.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/RetValue.o: values/RetValue.cpp

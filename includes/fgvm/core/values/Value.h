@@ -2,8 +2,8 @@
 
 #include <string>
 #include "../Constants.h"
-#include "../generator/Module.h"
 #include "../utils/FGError.h"
+#include "../generator/Module.h"
 #include "../Statement.h"
 
 namespace fgvm {

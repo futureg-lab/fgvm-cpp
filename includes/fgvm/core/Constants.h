@@ -24,6 +24,7 @@ namespace fgvm {
         AssignementID,
         AssignRefID,
         FunctionCallID,
+        FunctionCustomCallID,
         ReturnID
     };
 
