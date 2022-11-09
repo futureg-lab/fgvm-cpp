@@ -140,9 +140,9 @@ std::string IRSourceGenerator::generate(fgvm::Loop* loop_stmt)
 	std::string src = "@loop %{0} {1}\n{2}";
 	std::string cond_var = loop_stmt->condition->name;
 	std::string bloc_name = loop_stmt->loop_bloc->name;
-	std::string l_bloc = generate(loop_stmt->loop_bloc) + INSTR_SEPARATOR;
+	std::string l_bloc = generate(loop_stmt->loop_bloc);
 	return IRUtils::format(
 		src,
-		{cond_var, bloc_name, bloc_name, l_bloc}
+		{cond_var, bloc_name, l_bloc}
 	);
 }

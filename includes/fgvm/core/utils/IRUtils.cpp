@@ -48,6 +48,27 @@ fgvm::Type* IRUtils::getTypeById(fgvm::EType etype)
     return numIdPtr[etype];
 }
 
+bool IRUtils::isNumber(fgvm::EType etype)
+{
+    using namespace fgvm;
+    std::map<unsigned int, fgvm::Type*> numIdPtr = {
+        {EType::Uint8, new U8()},
+        {EType::Uint16, new U16()},
+        {EType::Uint64, new U64()},
+        {EType::Uint32, new U32()},
+        {EType::Int8, new I8()},
+        {EType::Int16, new I16()},
+        {EType::Int32, new I32()},
+        {EType::Int64, new I64()},
+        {EType::Float32, new F32()},
+        {EType::Float64, new F64()},
+        {EType::Bool, new BOOL()},
+    };
+    if (numIdPtr.find(etype) == numIdPtr.end())
+        throw FGError::notExpected("type id " + std::to_string(etype) + " not recognized");
+    return numIdPtr[etype];
+}
+
 std::string IRUtils::join(std::vector<std::string>& list, std::string& sep)
 {
     std::string res = "";

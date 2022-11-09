@@ -15,6 +15,8 @@ namespace IRUtils {
     const std::string enumTypeToStr(fgvm::EType etype);
     fgvm::Type* getTypeById(fgvm::EType type);
     
+    bool isNumber(fgvm::EType type);
+
     // a1, a2, .. aN => a1 sep a2 sep a3 sep ... sep aN
     std::string join(std::vector<std::string>& list, std::string& sep);
 

@@ -104,12 +104,21 @@ void testFunc() {
     auto set_ref = builder->createSetRef("same_ref", alloc_mem, s1);
 
     // test bool if and loop
-    auto test_bool = builder->createValue("m_bool", new BOOL(false));
 
+    // if statement
+    auto test_bool = builder->createValue("m_bool", new BOOL(false));
     auto if_bloc = builder->createBloc("if_bloc");
     if_bloc->addStmt(builder->createValue("m_bool", new BOOL(false)));
     auto if_stmt = builder->createIF(test_bool, if_bloc, nullptr);
-
+    // loop
+    auto loop_bloc = builder->createBloc("loop_bloc");
+    auto to_incr = builder->createValue("temp_i", new U32(0));
+    auto max_val = builder->createValue("max_val", new U32(10));
+    auto compare = builder->createCompLT("less_t", to_incr, max_val);
+    loop_bloc->addStmt(builder->createIncr(max_val));
+    loop_bloc->addStmt(compare);
+    auto loop_stmt = builder->createLoop(compare, loop_bloc);
+    
     // setup the call chain
     auto bloc = builder->createBloc("func_body");
     bloc->addStmt(s1);
@@ -120,8 +129,10 @@ void testFunc() {
     bloc->addStmt(alloc_size);
     bloc->addStmt(alloc_mem);
     bloc->addStmt(set_ref);
-    bloc->addStmt(if_stmt);
     bloc->addStmt(res_div);
+    bloc->addStmt(if_stmt);
+    bloc->addStmt(compare);
+    bloc->addStmt(loop_stmt);
 
     // bloc->addStmt(ret_val); // throws an error
     // bloc->setRetValue(builder->createReturn(s4)); // throws an error
