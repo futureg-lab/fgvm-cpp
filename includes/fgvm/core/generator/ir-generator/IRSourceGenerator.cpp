@@ -1,12 +1,6 @@
 #include "IRSourceGenerator.h"
 
 
-
-std::string IRSourceGenerator::buildStrType(size_t size)
-{
-	return "<" + std::to_string(size) + ">";
-}
-
 std::string IRSourceGenerator::generate(fgvm::FArgValue* value)
 {
 	std::string type = IRUtils::enumTypeToStr(value->content->getTypeId());
@@ -57,11 +51,6 @@ std::string IRSourceGenerator::generate(fgvm::SARValue* value)
 	std::string src = "%{0} = {1} {2}";
 	std::string type = IRUtils::enumTypeToStr(value->expectedReductionTypeID());
 	std::string stored_value = value->content->storedValueAsString();
-	if (value->expectedReductionTypeID() == fgvm::EType::Str) {
-		auto str_content = dynamic_cast<fgvm::STR*>(value->content);
-		type += buildStrType(str_content->totalBits() / 8u);
-		stored_value = "\"" + stored_value + "\"";
-	}
 	return IRUtils::format(
 		src,
 		{ value->name, type, stored_value }

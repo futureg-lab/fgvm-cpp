@@ -10,13 +10,13 @@ namespace fgvm {
 	};
 
 	class Token {
-	protected:
+	private:
+		void define(int type, std::string value, CursorPosition cursor, std::string description);
+	public:
 		int type = -1;
 		std::string value = "";
 		CursorPosition cursor;
 		std::string description = "";
-		void define(int type, std::string value, CursorPosition cursor, std::string description);
-	public:
 		Token(int type, std::string value, CursorPosition cursor, std::string description);
 		Token(int type, char value, CursorPosition cursor, std::string description);
 		virtual std::string to_string();

@@ -116,11 +116,4 @@ namespace fgvm {
         VOID();
         std::string storedValueAsString() const override;
     };
-
-
-    class LIST : public Type {
-    public:
-        LIST();
-        std::string storedValueAsString() const override;
-    };
 }

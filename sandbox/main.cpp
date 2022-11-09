@@ -71,7 +71,7 @@ void sandbox2()
     using namespace fgvm;
     auto generator = new IRSourceGenerator();
     auto s1 = builder->createValue("x", new I32(2));
-    auto s2 = builder->createRef("y", s1);
+    auto s2 = builder->createGetAddrOf("y", s1);
     auto ret = builder->createReturn(s2);
 
     auto s_add = builder->createAdd("res", builder->createValue("a", new I32(4)), builder->createValue("b", new I32(7)));
@@ -93,15 +93,17 @@ void testFunc() {
     auto s1 = builder->createValue("test", new I32(8));
     auto s2 = builder->createValue("test2", new I32(9));
     auto s3 = builder->createValue("ok", new STR("All ok!"));
-    auto s4 = builder->createRef("m_ref", s3);
-    auto s5 = builder->createDeref("deref", s4); 
+    auto s4 = builder->createGetAddrOf("m_ref", s3);
+    auto s5 = builder->createGetValAddr("deref", s4); 
     auto res_div = builder->createDiv("res_div", args[0], args[1]);
     auto ret_val = builder->createReturn(res_div);
 
     // test custom call
     auto alloc_size = builder->createValue("alloc_size", new U32(6));
     auto alloc_mem = builder->createAlloc("alloc", alloc_size);
-    auto set_ref = builder->createSetRef("same_ref", alloc_mem, s1);
+    auto set_ref = builder->createSetValAddr("same_ref", alloc_mem, s1);
+    auto suppose_i_am_anything = builder->createValue("something", new I32(1234));
+    auto off__ref = builder->createSetValAddr("same_ref", alloc_mem, suppose_i_am_anything);
 
     // test bool if and loop
 
@@ -128,6 +130,8 @@ void testFunc() {
     bloc->addStmt(s5);
     bloc->addStmt(alloc_size);
     bloc->addStmt(alloc_mem);
+    bloc->addStmt(suppose_i_am_anything);
+    bloc->addStmt(off__ref);
     bloc->addStmt(set_ref);
     bloc->addStmt(res_div);
     bloc->addStmt(if_stmt);

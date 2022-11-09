@@ -14,9 +14,6 @@ namespace fgvm {
 		std::string source = "";
 		std::string filepath = "";
 		CursorPosition cursor;
-		void nextChar();
-		char peekNextChar() const;
-		bool hasEnded() const;
 
 		// standard string : "hello world!"
 		std::string makeString();
@@ -32,5 +29,9 @@ namespace fgvm {
 		static bool isAlpha(char character);
 		static bool isStandardExpression(char character);
 		static std::logic_error tokenError(std::string reason, CursorPosition& pos, std::string filepath);
+
+		void nextChar();
+		char peekNextChar() const;
+		bool hasEnded() const;
 	};
 }

@@ -9,6 +9,7 @@
 namespace fgvm {
     class Statement;
     class Value;
+
     class Module {
     private:
         std::set<Statement*> ptr_pool;

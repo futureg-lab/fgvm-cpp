@@ -50,7 +50,7 @@ fgvm::FArgValue* fgvm::CodeBuilder::createArg(std::string name, fgvm::EType type
 	return arg;
 }
 
-fgvm::SARRefValue* fgvm::CodeBuilder::createRef(std::string name, fgvm::Value* value)
+fgvm::SARRefValue* fgvm::CodeBuilder::createGetAddrOf(std::string name, fgvm::Value* value)
 {
 	fgvm::SARRefValue* ref_value = new fgvm::SARRefValue(name, value);
 	registerToModuleObjectPool(ref_value);
@@ -68,22 +68,23 @@ fgvm::Value* fgvm::CodeBuilder::createAlloc(std::string name, fgvm::Value* mem_s
 	return fcall;
 }
 
-fgvm::Value* fgvm::CodeBuilder::createGetRefAt(std::string name, fgvm::SARRefValue* ref, fgvm::Value* offset)
-{
-	auto fcall = createBinaryFunc("ref_offset", name, ref, offset);
-	return fcall;
-}
-
-fgvm::Value* fgvm::CodeBuilder::createSetRef(std::string name, fgvm::Value* ref_or_addr, fgvm::Value* value)
+fgvm::Value* fgvm::CodeBuilder::createSetValAddr(std::string name, fgvm::Value* ref_or_addr, fgvm::Value* value)
 {
 	if (ref_or_addr->expectedReductionTypeID() != fgvm::EType::Uint32) {
 		auto expected = fgvm::EType::Uint32;
 		auto got = ref_or_addr->expectedReductionTypeID();
 		throw FGError::typeMismatch("invalid reference address type reduction", expected, got);
 	}
-	auto fcustomcall = new fgvm::FunctionCustomCallValue(name, "set_ref", { ref_or_addr, value }, fgvm::EType::Uint32);
+	auto fcustomcall = new fgvm::FunctionCustomCallValue(name, "set_val_addr", { ref_or_addr, value }, fgvm::EType::Uint32);
 	registerToModuleObjectPool(fcustomcall);
 	return fcustomcall;
+}
+
+fgvm::Value* fgvm::CodeBuilder::createGetValAddr(std::string name, fgvm::SARRefValue* ref)
+{
+	auto fcall = new fgvm::FunctionCallValue(name, "get_val_addr", { ref });
+	registerToModuleObjectPool(fcall);
+	return fcall;
 }
 
 fgvm::RetValue* fgvm::CodeBuilder::createReturn(fgvm::Value* value)
@@ -113,13 +114,6 @@ fgvm::Value* fgvm::CodeBuilder::createDiv(std::string name, fgvm::Value* L, fgvm
 fgvm::Value* fgvm::CodeBuilder::createMult(std::string name, fgvm::Value* L, fgvm::Value* R)
 {
 	return createBinaryFunc("mult", name, L, R);
-}
-
-fgvm::Value* fgvm::CodeBuilder::createDeref(std::string name, fgvm::SARRefValue* ref)
-{
-	auto fcall = new fgvm::FunctionCallValue(name, "deref", {ref});
-	registerToModuleObjectPool(fcall);
-	return fcall;
 }
 
 fgvm::Value* fgvm::CodeBuilder::createIncr(fgvm::Value* value)

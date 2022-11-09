@@ -3,57 +3,68 @@
 #include <iostream>
 
 #include "../../core/analytic-tools/Parser.h"
-#include "../../core/values/Value.h"
 #include "../../core/generator/Module.h"
 #include "../../core/generator/CodeBuilder.h"
 
+#include "BrainfLexer.h"
+
+#include <memory>
+
 namespace Brainf_ck {
+	struct AST;
 	struct BodyAST;
 	struct MemAST;
 	struct OpAST;
 	struct LoopAST;
 
-	
+
 	class BrainfParser : public fgvm::Parser {
 	public:
 		std::unique_ptr<fgvm::Module> module_owner;
 		std::unique_ptr<fgvm::CodeBuilder> builder;
 
-		std::unique_ptr<BodyAST> parse();
-		std::unique_ptr<BodyAST> singlePass();
+		BodyAST* parse();
+		AST* singlePass();
 
 		BrainfParser(std::vector<fgvm::Token>& tokens);
+
+
+		// visitor pattern
+		fgvm::Statement* visit(BodyAST* ast);
+		fgvm::Statement* visit(MemAST* ast);
+		fgvm::Statement* visit(OpAST* ast);
+		fgvm::Statement* visit(LoopAST* ast);
+
 		std::string compileToIntermediateCode() override;
+	private:
+		LoopAST* handleLoopBlock();
 	};
 
 
-	struct AST {
-		virtual fgvm::Value* codegen() = 0;
-	};
+	struct AST { };
+
+	enum ASTType { BODY_AST, MEM_ACTION_AST, OP_ACTION_AST, LOOP_AST };
 
 	struct BodyAST : public AST {
 		std::vector<std::unique_ptr<BodyAST>> expressions;
-		fgvm::Value* codegen() override;
+		ASTType type = BODY_AST;
+		BodyAST() {}
 	};
 
 	struct MemAST : public AST {
-	private:
 		bool go_left = false;
-	public:
-		MemAST(bool go_left);
-		fgvm::Value* codegen() override;
+		ASTType type = MEM_ACTION_AST;
+		MemAST(bool go_left) : go_left(go_left) {}
 	};
 
 	struct OpAST : public AST {
-	private:
 		bool do_sub = false;
-	public:
-		OpAST(bool do_sub);
-		fgvm::Value* codegen() override;
+		ASTType type = OP_ACTION_AST;
+		OpAST(bool do_sub) : do_sub(do_sub) {}
 	};
 
 	struct LoopAST : public AST {
+		ASTType type = LOOP_AST;
 		std::unique_ptr<BodyAST> body;
-		fgvm::Value* codegen() override;
 	};
 }

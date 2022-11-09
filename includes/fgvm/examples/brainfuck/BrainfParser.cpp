@@ -3,80 +3,73 @@
 
 using namespace Brainf_ck;
 
-std::unique_ptr<BodyAST> Brainf_ck::BrainfParser::parse()
+BodyAST* Brainf_ck::BrainfParser::parse()
 {
-	return std::unique_ptr<BodyAST>();
+    return nullptr;
 }
 
-std::unique_ptr<BodyAST> Brainf_ck::BrainfParser::singlePass()
+AST* Brainf_ck::BrainfParser::singlePass()
 {
-    std::unique_ptr<BodyAST> ast = std::make_unique<BodyAST>();
-    /*
-    const {type} = this.currentToken();
-    switch (type) {
-    case TokenID.MEM_LEFT:
+    // int type = currentToken().type;
+
+    AST* ast = nullptr;
+
+    switch (currentToken().type) {
+    case TokenType::MEM_LEFT:
         ast = new MemAST(true); // true == go_left
         break;
-    case TokenID.MEM_RIGHT:
+    case TokenType::MEM_RIGHT:
         ast = new MemAST(false); // false == go_left
         break;
-    case TokenID.PLUS:
-        ast = new OpAST(true); // true == do_sub
+    case TokenType::PLUS:
+        ast = new OpAST(false); // true == do_sub
         break;
-    case TokenID.MINUS:
-        ast = new OpAST(false); // false == do_sub
+    case TokenType::MINUS:
+        ast = new OpAST(true); // false == do_sub
         break;
-    case TokenID.LOOP_OPEN: // ] will automatically be handled
-        ast = this.handleLoopBlock();
-    case TokenID.UNKNOWN:
+    case TokenType::LOOP_OPEN: // ] will automatically be handled
+        ast = handleLoopBlock();
+    case TokenType::UNKNOWN:
         break;
     }
-    return ast;*/
-	return std::unique_ptr<BodyAST>();
+
+    return ast;
 }
 
 Brainf_ck::BrainfParser::BrainfParser(std::vector<fgvm::Token>& tokens)
-	: Parser(tokens)
+    : Parser(tokens)
 {
     this->module_owner = std::make_unique<fgvm::Module>();
     this->builder = std::make_unique<fgvm::CodeBuilder>(module_owner.get());
 }
 
+fgvm::Statement* Brainf_ck::BrainfParser::visit(BodyAST* ast)
+{
+    return nullptr;
+}
+
+fgvm::Statement* Brainf_ck::BrainfParser::visit(MemAST* ast)
+{
+    return nullptr;
+}
+
+fgvm::Statement* Brainf_ck::BrainfParser::visit(OpAST* ast)
+{
+    return nullptr;
+}
+
+fgvm::Statement* Brainf_ck::BrainfParser::visit(LoopAST* ast)
+{
+    return nullptr;
+}
+
 // 
 std::string Brainf_ck::BrainfParser::compileToIntermediateCode()
 {
-	return std::string();
+    return std::string();
 }
 
-fgvm::Value* Brainf_ck::BodyAST::codegen()
-{
-    return nullptr;
-}
-
-// memory
-Brainf_ck::MemAST::MemAST(bool go_left)
-{
-    this->go_left = go_left;
-}
-
-fgvm::Value* Brainf_ck::MemAST::codegen()
-{
-    return nullptr;
-}
-
-// Op
-Brainf_ck::OpAST::OpAST(bool do_sub)
-{
-    this->do_sub = do_sub;
-}
-
-fgvm::Value* Brainf_ck::OpAST::codegen()
-{
-    return nullptr;
-}
-
-// Loop
-fgvm::Value* Brainf_ck::LoopAST::codegen()
+LoopAST* Brainf_ck::BrainfParser::handleLoopBlock()
 {
     return nullptr;
 }

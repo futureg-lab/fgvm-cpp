@@ -35,11 +35,12 @@ namespace fgvm {
 		fgvm::SARValue* createValue(std::string name, fgvm::Type* content);
 		fgvm::FArgValue* createArg(std::string name, fgvm::EType type_hint_id);
 
-		fgvm::SARRefValue* createRef(std::string name, fgvm::Value* value);
 		// handling memory
+		// %x = 
+		fgvm::SARRefValue* createGetAddrOf(std::string name, fgvm::Value* value);
 		fgvm::Value* createAlloc(std::string name, fgvm::Value* mem_size);
-		fgvm::Value* createGetRefAt(std::string name, fgvm::SARRefValue* ref, fgvm::Value* offset);
-		fgvm::Value* createSetRef(std::string name, fgvm::Value* ref_or_addr, fgvm::Value* value);
+		fgvm::Value* createSetValAddr(std::string name, fgvm::Value* addr, fgvm::Value* value);
+		fgvm::Value* createGetValAddr(std::string name, fgvm::SARRefValue* ref);
 
 		fgvm::RetValue* createReturn(fgvm::Value* value);
 
@@ -49,7 +50,6 @@ namespace fgvm {
 		fgvm::Value* createSub(std::string name, fgvm::Value* L, fgvm::Value* R);
 		fgvm::Value* createDiv(std::string name, fgvm::Value* L, fgvm::Value* R);
 		fgvm::Value* createMult(std::string name, fgvm::Value* L, fgvm::Value* R);
-		fgvm::Value* createDeref(std::string name, fgvm::SARRefValue* ref);
 		fgvm::Value* createIncr(fgvm::Value* value);
 		fgvm::Value* createDecr(fgvm::Value* value);
 
