@@ -91,7 +91,7 @@ std::string IRSourceGenerator::generate(fgvm::Bloc* bloc)
 
 std::string IRSourceGenerator::generate(fgvm::ConditionalBr* if_stmt)
 {
-	std::string src = "@if %{0} {1} {2}";
+	std::string src = "@if %{0} {1} @else {2}\n{3}";
 
 	std::string cond_var = if_stmt->condition->name;
 	auto true_bloc = if_stmt->true_bloc;
@@ -99,19 +99,19 @@ std::string IRSourceGenerator::generate(fgvm::ConditionalBr* if_stmt)
 
 
 	if (else_bloc == nullptr) {
-		src = "@if %{0} {1}";
+		src = "@if %{0} {1}\n{2}";
 		return IRUtils::format(
 			src,
-			{ cond_var, generate(true_bloc) + INSTR_SEPARATOR }
+			{ cond_var, true_bloc->name, generate(true_bloc) }
 		);
 	}
 
 	std::string bloc_a = generate(true_bloc) + INSTR_SEPARATOR;
-	std::string bloc_b = generate(else_bloc) + INSTR_SEPARATOR;
+	std::string bloc_b = generate(else_bloc);
 
 	return IRUtils::format(
 		src, 
-		{ cond_var, bloc_a, bloc_b }
+		{ cond_var, true_bloc->name, else_bloc->name, bloc_a, bloc_b }
 	);
 }
 

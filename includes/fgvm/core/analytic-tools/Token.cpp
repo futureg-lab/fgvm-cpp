@@ -15,7 +15,7 @@ fgvm::Token::Token(int type, std::string value, CursorPosition cursor, std::stri
 
 fgvm::Token::Token(int type, char value, CursorPosition cursor, std::string description)
 {
-    std::string str_value(&value);
+    std::string str_value = {value};
     define(type, str_value, cursor, description);
 }
 

@@ -16,10 +16,12 @@ const std::string IRUtils::enumTypeToStr(fgvm::EType etype)
         {EType::Int64, "i64"},
         {EType::Float32, "f32"},
         {EType::Float64, "f64"},
+        {EType::Bool, "bool"},
         {EType::Str, "str"},
         {EType::Void, "void"}
     };
-    FGError::ASSERT(numIdStr.find(etype) != numIdStr.end());
+    if (numIdStr.find(etype) == numIdStr.end())
+        throw FGError::notExpected("type id " + std::to_string(etype) + " not recognized");
     return numIdStr[etype];
 }
 
@@ -37,11 +39,12 @@ fgvm::Type* IRUtils::getTypeById(fgvm::EType etype)
         {EType::Int64, new I64()},
         {EType::Float32, new F32()},
         {EType::Float64, new F64()},
+        {EType::Bool, new BOOL()},
         {EType::Str, new STR()},
         {EType::Void, new VOID()}
     };
-
-    FGError::ASSERT(numIdPtr.find(etype) != numIdPtr.end());
+    if (numIdPtr.find(etype) == numIdPtr.end())
+        throw FGError::notExpected("type id " + std::to_string(etype) + " not recognized");
     return numIdPtr[etype];
 }
 

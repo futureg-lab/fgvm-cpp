@@ -155,8 +155,8 @@ fgvm::ConditionalBr* fgvm::CodeBuilder::createIF(fgvm::Value* condition, fgvm::B
 	fgvm::ConditionalBr* cond = new fgvm::ConditionalBr(condition, if_bloc, else_bloc);
 	registerToModuleObjectPool(cond);
 	FGError::NOT_NULL(cond->true_bloc);
-	FGError::NOT_NULL(cond->else_bloc);
 	FGError::NOT_NULL(cond->condition);
+	// FGError::NOT_NULL(cond->else_bloc);
 	return cond;
 }
 

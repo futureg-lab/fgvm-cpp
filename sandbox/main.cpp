@@ -108,9 +108,7 @@ void testFunc() {
 
     auto if_bloc = builder->createBloc("if_bloc");
     if_bloc->addStmt(builder->createValue("m_bool", new BOOL(false)));
-    auto t_void = builder->createValue("void", new VOID());
-    if_bloc->setRetValue(builder->createReturn(t_void));
-    // auto if_stmt = builder->createIF(test_bool, if_bloc, nullptr);
+    auto if_stmt = builder->createIF(test_bool, if_bloc, nullptr);
 
     // setup the call chain
     auto bloc = builder->createBloc("func_body");
@@ -122,7 +120,7 @@ void testFunc() {
     bloc->addStmt(alloc_size);
     bloc->addStmt(alloc_mem);
     bloc->addStmt(set_ref);
-    bloc->addStmt(if_bloc);
+    bloc->addStmt(if_stmt);
     bloc->addStmt(res_div);
 
     // bloc->addStmt(ret_val); // throws an error
