@@ -69,6 +69,26 @@ bool IRUtils::isNumber(fgvm::EType etype)
     return numIdPtr[etype];
 }
 
+std::string IRUtils::prettifyIRSourceCode(std::string source)
+{
+    std::stringstream ss(source);
+    std::string output = "";
+    std::string line;
+    int indent = 0;
+    while (getline(ss, line)) {
+        if (line.find('}') != std::string::npos)
+            indent--;
+        if (indent < 0)
+            FGError::notExpected("invalid IR code, encountered a \"}\" without \"{\"");
+        std::string cumul_space = "";
+        for (int i = 0; i < indent; i++, cumul_space += "  ");
+        output += cumul_space + line + "\n";
+        if (line.find('{') != std::string::npos)
+            indent++;
+    }
+    return output;
+}
+
 std::string IRUtils::join(std::vector<std::string>& list, std::string& sep)
 {
     std::string res = "";

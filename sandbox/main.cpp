@@ -4,10 +4,11 @@
 #include "fgvm/core/utils/IRUtils.h"
 
 #include "fgvm/core/generator/ir-generator/IRSourceGenerator.h"
-#include "fgvm/core/analytic-tools/Lexer.h"
+// #include "fgvm/core/analytic-tools/Lexer.h"
 
 #include "fgvm/examples/fg-script/FGLexer.h"
 #include "fgvm/examples/brainfuck/BrainfLexer.h"
+#include "fgvm/examples/brainfuck/BrainfParser.h"
 
 #include <memory>
 
@@ -184,24 +185,30 @@ void testLexer2() {
 void testLexerBrainfuck() {
     using namespace Brainf_ck;
     std::string file = "<sandbox>";
-    std::string source = ",+++-[>++.<-]";
+    std::string source = "><++-[>++[>+<-]<-]+";
+    // std::string source = "><++-+";
 
     BrainfLexer lexer(source, file);
-    auto res = lexer.tokenize();
-    std::cout << "N tokens " << res.size() << std::endl;
-    for (auto& token : res) {
+    auto tokens = lexer.tokenize();
+    std::cout << "N tokens " << tokens.size() << std::endl;
+    for (auto& token : tokens) {
         std::cout << token.to_string() << std::endl;
     }
+
+    BrainfParser parser(tokens);
+    std::string ir_code = parser.compileToIntermediateCode();
+
+    std::cout << IRUtils::prettifyIRSourceCode(ir_code);
 }
 
 int main() 
 {
     try {
         // sandbox2();
-        testFunc();
+        // testFunc();
         // testLexer1();
         // testLexer2();
-        // testLexerBrainfuck();
+        testLexerBrainfuck();
     }
     catch (std::logic_error err) {
         std::cerr << "Oups !\n";

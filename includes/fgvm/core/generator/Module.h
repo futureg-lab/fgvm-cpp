@@ -2,6 +2,7 @@
 #include <map>
 #include <string>
 #include <set>
+#include <unordered_map>
 
 #include "../values/Value.h"
 #include "../types/AtomicTypes.h"

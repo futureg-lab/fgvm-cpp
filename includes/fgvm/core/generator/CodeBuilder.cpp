@@ -68,14 +68,14 @@ fgvm::Value* fgvm::CodeBuilder::createAlloc(std::string name, fgvm::Value* mem_s
 	return fcall;
 }
 
-fgvm::Value* fgvm::CodeBuilder::createSetValAddr(std::string name, fgvm::Value* ref_or_addr, fgvm::Value* value)
+fgvm::Value* fgvm::CodeBuilder::createSetValAddr(std::string name, fgvm::Value* ref, fgvm::Value* value)
 {
-	if (ref_or_addr->expectedReductionTypeID() != fgvm::EType::Uint32) {
+	if (ref->expectedReductionTypeID() != fgvm::EType::Uint32) {
 		auto expected = fgvm::EType::Uint32;
-		auto got = ref_or_addr->expectedReductionTypeID();
+		auto got = ref->expectedReductionTypeID();
 		throw FGError::typeMismatch("invalid reference address type reduction", expected, got);
 	}
-	auto fcustomcall = new fgvm::FunctionCustomCallValue(name, "set_val_addr", { ref_or_addr, value }, fgvm::EType::Uint32);
+	auto fcustomcall = new fgvm::FunctionCustomCallValue(name, "set_val_addr", { ref, value }, fgvm::EType::Uint32);
 	registerToModuleObjectPool(fcustomcall);
 	return fcustomcall;
 }
@@ -83,6 +83,18 @@ fgvm::Value* fgvm::CodeBuilder::createSetValAddr(std::string name, fgvm::Value* 
 fgvm::Value* fgvm::CodeBuilder::createGetValAddr(std::string name, fgvm::SARRefValue* ref)
 {
 	auto fcall = new fgvm::FunctionCallValue(name, "get_val_addr", { ref });
+	registerToModuleObjectPool(fcall);
+	return fcall;
+}
+
+fgvm::Value* fgvm::CodeBuilder::createGetValAddr(std::string name, fgvm::Value* ref, EType type_output_hint)
+{
+	if (ref->expectedReductionTypeID() != fgvm::EType::Uint32) {
+		auto expected = fgvm::EType::Uint32;
+		auto got = ref->expectedReductionTypeID();
+		throw FGError::typeMismatch("invalid reference address type reduction", expected, got);
+	}
+	auto fcall = new fgvm::FunctionCustomCallValue(name, "get_val_addr", { ref }, type_output_hint);
 	registerToModuleObjectPool(fcall);
 	return fcall;
 }

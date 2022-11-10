@@ -41,6 +41,7 @@ namespace fgvm {
 		fgvm::Value* createAlloc(std::string name, fgvm::Value* mem_size);
 		fgvm::Value* createSetValAddr(std::string name, fgvm::Value* addr, fgvm::Value* value);
 		fgvm::Value* createGetValAddr(std::string name, fgvm::SARRefValue* ref);
+		fgvm::Value* createGetValAddr(std::string name, fgvm::Value* ref, fgvm::EType type_output_hint);
 
 		fgvm::RetValue* createReturn(fgvm::Value* value);
 
@@ -72,5 +73,10 @@ namespace fgvm {
 		fgvm::Bloc* createBloc(std::string name);
 		fgvm::ConditionalBr* createIF(fgvm::Value* condition, fgvm::Bloc* if_bloc, fgvm::Bloc* else_bloc);
 		fgvm::Loop* createLoop(fgvm::Value* condition, fgvm::Bloc* bloc);
+
+		// stdin and out
+		// TODO
+		// fgvm::SARValue* createStdout(std::string name, fgvm::Value* value);
+		// fgvm::SARValue* createStdin(std::string name, fgvm::SARRefValue* container);
 	};
 }
