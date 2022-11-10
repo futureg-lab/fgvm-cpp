@@ -33,12 +33,7 @@ std::vector<fgvm::Token> Brainf_ck::BrainfLexer::tokenize()
             continue;
         }
 
-        std::cout << "got " << current_char << std::endl;
-
         // fallback
-        if (!hasEnded())
-            tokens.push_back(createTokenUnknown());
-
         nextChar();
     }
     
@@ -57,7 +52,8 @@ std::string Brainf_ck::BrainfLexer::describe(int type_token)
         {LOOP_OPEN, "loop opened"},
         {LOOP_CLOSE, "loop closed"},
         {MEM_LEFT, "memory go left"},
-        {MEM_RIGHT, "memory go right"}
+        {MEM_RIGHT, "memory go right"},
+        {END_OF_FILE, "end of file"}
     };
     if (description.find(type_token) != description.end())
         return description[type_token];

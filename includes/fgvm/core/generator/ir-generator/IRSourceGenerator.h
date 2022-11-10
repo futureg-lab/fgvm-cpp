@@ -12,7 +12,6 @@ private:
 	std::string INSTR_SEPARATOR = "\n";
 	std::string INDENT = "   ";
 
-	std::string buildStrType(size_t size);
 public:
 	// values
 	

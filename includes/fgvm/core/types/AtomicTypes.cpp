@@ -202,12 +202,12 @@ std::string fgvm::BOOL::storedValueAsString() const
 }
 
 
+// Str
 fgvm::STR::STR()
 	: Type(0, EType::Str)
 {
 }
 
-// Str
 fgvm::STR::STR(const char* value)
 	: Type(strlen(value) * 8, EType::Str)
 {

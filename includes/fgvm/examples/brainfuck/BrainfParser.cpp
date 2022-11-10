@@ -3,80 +3,173 @@
 
 using namespace Brainf_ck;
 
-std::unique_ptr<BodyAST> Brainf_ck::BrainfParser::parse()
+
+// setup
+
+std::shared_ptr<BodyAST> Brainf_ck::BrainfParser::parse()
 {
-	return std::unique_ptr<BodyAST>();
+    std::shared_ptr<BodyAST> body = std::make_shared<BodyAST>();
+    while (currentToken().type != TokenType::END_OF_FILE) {
+        std::shared_ptr<AST> ast = singlePass();
+        if (ast)
+            body->addExpr((ast));
+        nextToken();
+    }
+    return body;
 }
 
-std::unique_ptr<BodyAST> Brainf_ck::BrainfParser::singlePass()
+std::shared_ptr<AST> Brainf_ck::BrainfParser::singlePass()
 {
-    std::unique_ptr<BodyAST> ast = std::make_unique<BodyAST>();
-    /*
-    const {type} = this.currentToken();
-    switch (type) {
-    case TokenID.MEM_LEFT:
-        ast = new MemAST(true); // true == go_left
+    std::shared_ptr<AST> ast = nullptr;
+    switch (currentToken().type) {
+    case TokenType::MEM_LEFT:
+        ast = std::make_shared<MemAST>(true); // true == go_left
         break;
-    case TokenID.MEM_RIGHT:
-        ast = new MemAST(false); // false == go_left
+    case TokenType::MEM_RIGHT:
+        ast = std::make_shared<MemAST>(false); // false == go_left
         break;
-    case TokenID.PLUS:
-        ast = new OpAST(true); // true == do_sub
+    case TokenType::PLUS:
+        ast = std::make_shared<OpAST>(false); // true == do_sub
         break;
-    case TokenID.MINUS:
-        ast = new OpAST(false); // false == do_sub
+    case TokenType::MINUS:
+        ast = std::make_shared<OpAST>(true); // false == do_sub
         break;
-    case TokenID.LOOP_OPEN: // ] will automatically be handled
-        ast = this.handleLoopBlock();
-    case TokenID.UNKNOWN:
+    case TokenType::LOOP_OPEN: // ] will automatically be handled
+        ast = handleLoopBlock();
         break;
     }
-    return ast;*/
-	return std::unique_ptr<BodyAST>();
+    return ast;
 }
 
 Brainf_ck::BrainfParser::BrainfParser(std::vector<fgvm::Token>& tokens)
-	: Parser(tokens)
+    : Parser(tokens)
 {
-    this->module_owner = std::make_unique<fgvm::Module>();
-    this->builder = std::make_unique<fgvm::CodeBuilder>(module_owner.get());
+    auto mem_size = builder->createValue("mem_size", new fgvm::U32(255));
+    main_ptr = builder->createAlloc("main_ptr", mem_size);
+    program->addStmt(mem_size);
+    program->addStmt(main_ptr);
+}
+
+fgvm::Statement* Brainf_ck::BrainfParser::visit(std::shared_ptr<AST> ast)
+{
+    fgvm::Statement* statement = nullptr;
+    
+    switch (ast->type) {
+    case ASTType::BODY_AST:
+        statement = visit(std::static_pointer_cast<BodyAST>(ast));
+        break;
+    case ASTType::LOOP_AST:
+        statement = visit(std::static_pointer_cast<LoopAST>(ast));
+        break;
+    case ASTType::MEM_ACTION_AST:
+        statement = visit(std::static_pointer_cast<MemAST>(ast));
+        break;
+    case ASTType::OP_ACTION_AST:
+        statement = visit(std::static_pointer_cast<OpAST>(ast));
+        break;
+    case ASTType::UNDEFINED_AST:
+        throw FGError::notExpected("invalid expression id encountered");
+    }
+
+    return statement;
+}
+
+
+fgvm::Statement* Brainf_ck::BrainfParser::visit(std::shared_ptr<BodyAST> ast)
+{
+    fgvm::Bloc* bloc = builder->createBloc("bf_bloc");
+    for (auto& expr_ast : ast->expressions) {
+        auto stmt = visit(expr_ast);
+        if (stmt != nullptr)
+            bloc->addStmt(stmt);
+    }
+    return bloc;
+}
+
+fgvm::Statement* Brainf_ck::BrainfParser::visit(std::shared_ptr<MemAST> ast)
+{
+    fgvm::Value* temp = nullptr;
+    if (ast->go_left)
+        temp = builder->createIncr(main_ptr);
+    else
+        temp = builder->createDecr(main_ptr);
+    return temp;
+}
+
+fgvm::Statement* Brainf_ck::BrainfParser::visit(std::shared_ptr<OpAST> ast)
+{
+    fgvm::Bloc* temp_bloc = builder->createBloc("t_b");
+
+    // get current value
+    auto curr_val = builder->createGetValAddr("t_curr", main_ptr, fgvm::EType::Uint8);
+    temp_bloc->addStmt(curr_val);
+    
+    // increment or decrement
+    fgvm::Value* incr_or_decr = nullptr;
+    if (ast->do_sub)
+        incr_or_decr = builder->createIncr(curr_val);
+    else
+        incr_or_decr = builder->createDecr(curr_val);
+    temp_bloc->addStmt(incr_or_decr);
+
+    // set current value
+    auto set_val = builder->createSetValAddr("t_set", main_ptr, incr_or_decr);
+    temp_bloc->addStmt(set_val);
+
+
+    return temp_bloc;
+}
+
+fgvm::Statement* Brainf_ck::BrainfParser::visit(std::shared_ptr<LoopAST> ast)
+{
+    auto temp_bloc = builder->createBloc("temp_b");
+    
+    auto curr_val = builder->createGetValAddr("curr_val", main_ptr, fgvm::EType::Uint8);
+    temp_bloc->addStmt(curr_val);
+
+    auto loop_bloc = builder->createBloc("loop_bloc");
+    // should probably cache this value but whatever
+    auto zero = builder->createValue("zero", new fgvm::U8(0));
+    temp_bloc->addStmt(zero);
+    auto cond = builder->createCompEQ("comp", curr_val, zero);
+    temp_bloc->addStmt(cond);
+
+    auto loop = builder->createLoop(cond, loop_bloc);
+    // populate loop_bloc
+    for (auto& expr : ast->body->expressions)
+        loop_bloc->addStmt(visit(expr));
+    temp_bloc->addStmt(loop);
+
+    return temp_bloc;
 }
 
 // 
 std::string Brainf_ck::BrainfParser::compileToIntermediateCode()
 {
-	return std::string();
+    std::shared_ptr<BodyAST> ast = parse();
+    fgvm::Statement* stmt = visit((ast));
+
+    auto bloc = dynamic_cast<fgvm::Bloc*>(stmt);
+
+    program->addStmt(bloc);
+    return generator->generate(program);
 }
 
-fgvm::Value* Brainf_ck::BodyAST::codegen()
+std::shared_ptr<LoopAST> Brainf_ck::BrainfParser::handleLoopBlock()
 {
-    return nullptr;
-}
-
-// memory
-Brainf_ck::MemAST::MemAST(bool go_left)
-{
-    this->go_left = go_left;
-}
-
-fgvm::Value* Brainf_ck::MemAST::codegen()
-{
-    return nullptr;
-}
-
-// Op
-Brainf_ck::OpAST::OpAST(bool do_sub)
-{
-    this->do_sub = do_sub;
-}
-
-fgvm::Value* Brainf_ck::OpAST::codegen()
-{
-    return nullptr;
-}
-
-// Loop
-fgvm::Value* Brainf_ck::LoopAST::codegen()
-{
-    return nullptr;
+    std::shared_ptr<LoopAST> loop = std::make_shared<LoopAST>();
+    nextToken();
+    while (currentToken().type != TokenType::LOOP_CLOSE) {
+        // this will handle loops recursively
+        auto ast = singlePass();
+        if (ast)
+            loop->body->addExpr(ast);
+        nextToken();
+        if (currentToken().type == TokenType::END_OF_FILE) {
+            // premature end
+            auto cursor = currentToken().cursor;
+            throw FGError::notExpected("unclosed loop, ] expected at line " + std::to_string(cursor.line) + ", col " + std::to_string(cursor.col));
+        }
+    }
+    return loop;
 }

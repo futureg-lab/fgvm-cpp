@@ -10,7 +10,6 @@ namespace fgvm {
 	public:
 		Parser(std::vector<Token>& tokens);
 		virtual std::string compileToIntermediateCode() = 0;
-	protected:
 		Token tokenAt(size_t pos);
 		Token peekNextToken();
 		Token nextToken();

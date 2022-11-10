@@ -5,25 +5,20 @@ fgvm::Value* fgvm::CodeBuilder::createBinaryFunc(std::string fcall_name, std::st
 {
 	// L, R must be of the same type
 	auto fcall = new fgvm::FunctionCallValue(name, fcall_name, { L, R });
-	registerToSymbolTable(fcall);
+	registerToModuleObjectPool(fcall);
 	return fcall;
 }
 
 fgvm::Value* fgvm::CodeBuilder::createUnaryFunc(std::string fcall_name, std::string name, fgvm::Value* input)
 {
 	auto fcall = new fgvm::FunctionCallValue(name, fcall_name, { input });
-	registerToSymbolTable(fcall);
+	registerToModuleObjectPool(fcall);
 	return fcall;
 }
 
 void fgvm::CodeBuilder::registerToModuleObjectPool(fgvm::Statement* addr)
 {
 	this->module_container->addPool(addr);
-}
-
-void fgvm::CodeBuilder::registerToSymbolTable(fgvm::Value* value)
-{
-	this->module_container->addVariable(value->name, value);
 }
 
 // constructor
@@ -43,7 +38,7 @@ fgvm::CodeBuilder::~CodeBuilder()
 fgvm::SARValue* fgvm::CodeBuilder::createValue(std::string name, fgvm::Type* content)
 {
 	auto value = new fgvm::SARValue(name, content);
-	registerToSymbolTable(value);
+	registerToModuleObjectPool(value);
 	return value;
 }
 
@@ -55,10 +50,10 @@ fgvm::FArgValue* fgvm::CodeBuilder::createArg(std::string name, fgvm::EType type
 	return arg;
 }
 
-fgvm::SARRefValue* fgvm::CodeBuilder::createRef(std::string name, fgvm::Value* value)
+fgvm::SARRefValue* fgvm::CodeBuilder::createGetAddrOf(std::string name, fgvm::Value* value)
 {
 	fgvm::SARRefValue* ref_value = new fgvm::SARRefValue(name, value);
-	registerToSymbolTable(ref_value);
+	registerToModuleObjectPool(ref_value);
 	return ref_value;
 }
 
@@ -73,21 +68,35 @@ fgvm::Value* fgvm::CodeBuilder::createAlloc(std::string name, fgvm::Value* mem_s
 	return fcall;
 }
 
-fgvm::Value* fgvm::CodeBuilder::createGetRefAt(std::string name, fgvm::SARRefValue* ref, fgvm::Value* offset)
+fgvm::Value* fgvm::CodeBuilder::createSetValAddr(std::string name, fgvm::Value* ref, fgvm::Value* value)
 {
-	auto fcall = createBinaryFunc("ref_offset", name, ref, offset);
+	if (ref->expectedReductionTypeID() != fgvm::EType::Uint32) {
+		auto expected = fgvm::EType::Uint32;
+		auto got = ref->expectedReductionTypeID();
+		throw FGError::typeMismatch("invalid reference address type reduction", expected, got);
+	}
+	auto fcustomcall = new fgvm::FunctionCustomCallValue(name, "set_val_addr", { ref, value }, fgvm::EType::Uint32);
+	registerToModuleObjectPool(fcustomcall);
+	return fcustomcall;
+}
+
+fgvm::Value* fgvm::CodeBuilder::createGetValAddr(std::string name, fgvm::SARRefValue* ref)
+{
+	auto fcall = new fgvm::FunctionCallValue(name, "get_val_addr", { ref });
+	registerToModuleObjectPool(fcall);
 	return fcall;
 }
 
-fgvm::Value* fgvm::CodeBuilder::createSetRef(std::string name, fgvm::Value* ref_or_addr, fgvm::Value* value)
+fgvm::Value* fgvm::CodeBuilder::createGetValAddr(std::string name, fgvm::Value* ref, EType type_output_hint)
 {
-	if (ref_or_addr->expectedReductionTypeID() != fgvm::EType::Uint32) {
+	if (ref->expectedReductionTypeID() != fgvm::EType::Uint32) {
 		auto expected = fgvm::EType::Uint32;
-		auto got = ref_or_addr->expectedReductionTypeID();
+		auto got = ref->expectedReductionTypeID();
 		throw FGError::typeMismatch("invalid reference address type reduction", expected, got);
 	}
-	auto fcustomcall = new fgvm::FunctionCustomCallValue(name, "set_ref", { ref_or_addr, value }, fgvm::EType::Uint32);
-	return fcustomcall;
+	auto fcall = new fgvm::FunctionCustomCallValue(name, "get_val_addr", { ref }, type_output_hint);
+	registerToModuleObjectPool(fcall);
+	return fcall;
 }
 
 fgvm::RetValue* fgvm::CodeBuilder::createReturn(fgvm::Value* value)
@@ -119,17 +128,91 @@ fgvm::Value* fgvm::CodeBuilder::createMult(std::string name, fgvm::Value* L, fgv
 	return createBinaryFunc("mult", name, L, R);
 }
 
-fgvm::Value* fgvm::CodeBuilder::createDeref(std::string name, fgvm::SARRefValue* ref)
+fgvm::Value* fgvm::CodeBuilder::createIncr(fgvm::Value* value)
 {
-	auto fcall = new fgvm::FunctionCallValue(name, "deref", {ref});
-	registerToSymbolTable(fcall);
+	if (!IRUtils::isNumber(value->expectedReductionTypeID())) {
+		std::string type_str = IRUtils::enumTypeToStr(value->expectedReductionTypeID());
+		throw FGError::notAllowed("increment type " + type_str, "not a number");
+	}
+	auto fcall = createUnaryFunc("incr", value->name, value);
 	return fcall;
 }
+
+fgvm::Value* fgvm::CodeBuilder::createDecr(fgvm::Value* value)
+{
+	if (!IRUtils::isNumber(value->expectedReductionTypeID())) {
+		std::string type_str = IRUtils::enumTypeToStr(value->expectedReductionTypeID());
+		throw FGError::notAllowed("decrement type " + type_str, "not a number");
+	}
+	auto fcall = createUnaryFunc("decr", value->name, value);
+	return fcall;
+}
+
+fgvm::Value* fgvm::CodeBuilder::createCompEQ(std::string name, fgvm::Value* L, fgvm::Value* R)
+{
+	if (L->expectedReductionTypeID() != R->expectedReductionTypeID())
+		throw FGError::typeMismatch("\"eq\" arguments not of the same type", L->expectedReductionTypeID(), R->expectedReductionTypeID());
+
+	auto fcustomcall = new fgvm::FunctionCustomCallValue(name, "eq", { L, R }, fgvm::EType::Bool);
+	registerToModuleObjectPool(fcustomcall);
+	return fcustomcall;
+}
+
+fgvm::Value* fgvm::CodeBuilder::createCompNOTEQ(std::string name, fgvm::Value* L, fgvm::Value* R)
+{
+	if (L->expectedReductionTypeID() != R->expectedReductionTypeID())
+		throw FGError::typeMismatch("\"not_eq\" arguments not of the same type", L->expectedReductionTypeID(), R->expectedReductionTypeID());
+
+	auto fcustomcall = new fgvm::FunctionCustomCallValue(name, "not_eq", { L, R }, fgvm::EType::Bool);
+	registerToModuleObjectPool(fcustomcall);
+	return fcustomcall;
+}
+
+fgvm::Value* fgvm::CodeBuilder::createCompGTEQ(std::string name, fgvm::Value* L, fgvm::Value* R)
+{
+	if (L->expectedReductionTypeID() != R->expectedReductionTypeID())
+		throw FGError::typeMismatch("\"gte\" arguments not of the same type", L->expectedReductionTypeID(), R->expectedReductionTypeID());
+	auto fcustomcall = new fgvm::FunctionCustomCallValue(name, "gte", { L, R }, fgvm::EType::Bool);
+	registerToModuleObjectPool(fcustomcall);
+	return fcustomcall;
+}
+
+fgvm::Value* fgvm::CodeBuilder::createCompLTEQ(std::string name, fgvm::Value* L, fgvm::Value* R)
+{
+	if (L->expectedReductionTypeID() != R->expectedReductionTypeID())
+		throw FGError::typeMismatch("\"lte\" arguments not of the same type", L->expectedReductionTypeID(), R->expectedReductionTypeID());
+	auto fcustomcall = new fgvm::FunctionCustomCallValue(name, "lte", { L, R }, fgvm::EType::Bool);
+	registerToModuleObjectPool(fcustomcall);
+	return fcustomcall;
+}
+
+fgvm::Value* fgvm::CodeBuilder::createCompLT(std::string name, fgvm::Value* L, fgvm::Value* R)
+{
+	if (L->expectedReductionTypeID() != R->expectedReductionTypeID())
+		throw FGError::typeMismatch("\"lt\" arguments not of the same type", L->expectedReductionTypeID(), R->expectedReductionTypeID());
+	auto fcustomcall = new fgvm::FunctionCustomCallValue(name, "lt", { L, R }, fgvm::EType::Bool);
+	registerToModuleObjectPool(fcustomcall);
+	return fcustomcall;
+}
+
+fgvm::Value* fgvm::CodeBuilder::createCompGT(std::string name, fgvm::Value* L, fgvm::Value* R)
+{
+	if (L->expectedReductionTypeID() != R->expectedReductionTypeID())
+		throw FGError::typeMismatch("\"gt\" arguments not of the same type", L->expectedReductionTypeID(), R->expectedReductionTypeID());
+	auto fcustomcall = new fgvm::FunctionCustomCallValue(name, "gt", { L, R }, fgvm::EType::Bool);
+	registerToModuleObjectPool(fcustomcall);
+	return fcustomcall;
+}
+
+
+// Bloc
+
 
 fgvm::FunctionDef* fgvm::CodeBuilder::createFunc(std::string name, std::vector<fgvm::FArgValue*> args, fgvm::Bloc* bloc, fgvm::EType exp_ret_type)
 {
 	fgvm::FunctionDef* def = new fgvm::FunctionDef(name, args, bloc, exp_ret_type);
-	
+	registerToModuleObjectPool(def);
+
 	if (bloc->getRetValue() == nullptr)
 		throw FGError::invalidReturn("function " + name, def->ret_type, fgvm::EType::Unknown);
 
@@ -139,7 +222,6 @@ fgvm::FunctionDef* fgvm::CodeBuilder::createFunc(std::string name, std::vector<f
 		throw FGError::typeMismatch("function " + name, exp, got);
 	}
 
-	registerToModuleObjectPool(def);
 	return def;
 }
 
@@ -155,8 +237,8 @@ fgvm::ConditionalBr* fgvm::CodeBuilder::createIF(fgvm::Value* condition, fgvm::B
 	fgvm::ConditionalBr* cond = new fgvm::ConditionalBr(condition, if_bloc, else_bloc);
 	registerToModuleObjectPool(cond);
 	FGError::NOT_NULL(cond->true_bloc);
-	FGError::NOT_NULL(cond->else_bloc);
 	FGError::NOT_NULL(cond->condition);
+	// FGError::NOT_NULL(cond->else_bloc);
 	return cond;
 }
 

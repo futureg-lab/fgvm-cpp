@@ -4,10 +4,11 @@
 #include "fgvm/core/utils/IRUtils.h"
 
 #include "fgvm/core/generator/ir-generator/IRSourceGenerator.h"
-#include "fgvm/core/analytic-tools/Lexer.h"
+// #include "fgvm/core/analytic-tools/Lexer.h"
 
 #include "fgvm/examples/fg-script/FGLexer.h"
 #include "fgvm/examples/brainfuck/BrainfLexer.h"
+#include "fgvm/examples/brainfuck/BrainfParser.h"
 
 #include <memory>
 
@@ -71,7 +72,7 @@ void sandbox2()
     using namespace fgvm;
     auto generator = new IRSourceGenerator();
     auto s1 = builder->createValue("x", new I32(2));
-    auto s2 = builder->createRef("y", s1);
+    auto s2 = builder->createGetAddrOf("y", s1);
     auto ret = builder->createReturn(s2);
 
     auto s_add = builder->createAdd("res", builder->createValue("a", new I32(4)), builder->createValue("b", new I32(7)));
@@ -93,25 +94,34 @@ void testFunc() {
     auto s1 = builder->createValue("test", new I32(8));
     auto s2 = builder->createValue("test2", new I32(9));
     auto s3 = builder->createValue("ok", new STR("All ok!"));
-    auto s4 = builder->createRef("m_ref", s3);
-    auto s5 = builder->createDeref("deref", s4); 
+    auto s4 = builder->createGetAddrOf("m_ref", s3);
+    auto s5 = builder->createGetValAddr("deref", s4); 
     auto res_div = builder->createDiv("res_div", args[0], args[1]);
     auto ret_val = builder->createReturn(res_div);
 
     // test custom call
     auto alloc_size = builder->createValue("alloc_size", new U32(6));
     auto alloc_mem = builder->createAlloc("alloc", alloc_size);
-    auto set_ref = builder->createSetRef("same_ref", alloc_mem, s1);
+    auto set_ref = builder->createSetValAddr("same_ref", alloc_mem, s1);
+    auto suppose_i_am_anything = builder->createValue("something", new I32(1234));
+    auto off__ref = builder->createSetValAddr("same_ref", alloc_mem, suppose_i_am_anything);
 
     // test bool if and loop
-    auto test_bool = builder->createValue("m_bool", new BOOL(false));
 
+    // if statement
+    auto test_bool = builder->createValue("m_bool", new BOOL(false));
     auto if_bloc = builder->createBloc("if_bloc");
     if_bloc->addStmt(builder->createValue("m_bool", new BOOL(false)));
-    auto t_void = builder->createValue("void", new VOID());
-    if_bloc->setRetValue(builder->createReturn(t_void));
-    // auto if_stmt = builder->createIF(test_bool, if_bloc, nullptr);
-
+    auto if_stmt = builder->createIF(test_bool, if_bloc, nullptr);
+    // loop
+    auto loop_bloc = builder->createBloc("loop_bloc");
+    auto to_incr = builder->createValue("temp_i", new U32(0));
+    auto max_val = builder->createValue("max_val", new U32(10));
+    auto compare = builder->createCompLT("less_t", to_incr, max_val);
+    loop_bloc->addStmt(builder->createIncr(max_val));
+    loop_bloc->addStmt(compare);
+    auto loop_stmt = builder->createLoop(compare, loop_bloc);
+    
     // setup the call chain
     auto bloc = builder->createBloc("func_body");
     bloc->addStmt(s1);
@@ -121,9 +131,13 @@ void testFunc() {
     bloc->addStmt(s5);
     bloc->addStmt(alloc_size);
     bloc->addStmt(alloc_mem);
+    bloc->addStmt(suppose_i_am_anything);
+    bloc->addStmt(off__ref);
     bloc->addStmt(set_ref);
-    bloc->addStmt(if_bloc);
     bloc->addStmt(res_div);
+    bloc->addStmt(if_stmt);
+    bloc->addStmt(compare);
+    bloc->addStmt(loop_stmt);
 
     // bloc->addStmt(ret_val); // throws an error
     // bloc->setRetValue(builder->createReturn(s4)); // throws an error
@@ -171,24 +185,30 @@ void testLexer2() {
 void testLexerBrainfuck() {
     using namespace Brainf_ck;
     std::string file = "<sandbox>";
-    std::string source = ",+++-[>++.<-]";
+    std::string source = "><++-[>++[>+<-]<-]+";
+    // std::string source = "><++-+";
 
     BrainfLexer lexer(source, file);
-    auto res = lexer.tokenize();
-    std::cout << "N tokens " << res.size() << std::endl;
-    for (auto& token : res) {
+    auto tokens = lexer.tokenize();
+    std::cout << "N tokens " << tokens.size() << std::endl;
+    for (auto& token : tokens) {
         std::cout << token.to_string() << std::endl;
     }
+
+    BrainfParser parser(tokens);
+    std::string ir_code = parser.compileToIntermediateCode();
+
+    std::cout << IRUtils::prettifyIRSourceCode(ir_code);
 }
 
 int main() 
 {
     try {
         // sandbox2();
-        testFunc();
+        // testFunc();
         // testLexer1();
         // testLexer2();
-        // testLexerBrainfuck();
+        testLexerBrainfuck();
     }
     catch (std::logic_error err) {
         std::cerr << "Oups !\n";
