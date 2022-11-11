@@ -4,6 +4,8 @@
 #include "fgvm/core/utils/IRUtils.h"
 
 #include "fgvm/core/generator/ir-generator/IRSourceGenerator.h"
+#include "fgvm/core/generator/NameGenerator.h"
+
 // #include "fgvm/core/analytic-tools/Lexer.h"
 
 #include "fgvm/examples/fg-script/FGLexer.h"
@@ -201,6 +203,18 @@ void testLexerBrainfuck() {
     std::cout << IRUtils::prettifyIRSourceCode(ir_code);
 }
 
+void testNameGenerator() {
+    NameGenerator generator;
+    std::cout << generator.get("x") << std::endl;
+    std::cout << generator.get("x") << std::endl;
+    std::cout << generator.get("y") << std::endl;
+    std::cout << generator.get("z") << std::endl;
+    std::cout << generator.get("x") << std::endl;
+    std::cout << generator.get("y") << std::endl;
+    std::cout << generator.get("y") << std::endl;
+    std::cout << generator.get("x") << std::endl;
+}
+
 int main() 
 {
     try {
@@ -209,6 +223,7 @@ int main()
         // testLexer1();
         // testLexer2();
         testLexerBrainfuck();
+        // testNameGenerator();
     }
     catch (std::logic_error err) {
         std::cerr << "Oups !\n";

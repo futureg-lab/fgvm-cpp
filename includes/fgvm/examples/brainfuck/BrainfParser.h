@@ -8,6 +8,8 @@
 #include "../../core/generator/CodeBuilder.h"
 
 #include "../../core/generator/ir-generator/IRSourceGenerator.h"
+#include "../../core/generator/NameGenerator.h"
+
 
 #include "BrainfLexer.h"
 #include <memory>
@@ -21,9 +23,16 @@ namespace Brainf_ck {
 
 	class BrainfParser : public fgvm::Parser {
 	private:
-		std::unique_ptr<fgvm::Module> module_owner = std::make_unique<fgvm::Module>();
-		std::unique_ptr<fgvm::CodeBuilder> builder = std::make_unique<fgvm::CodeBuilder>(module_owner.get());
+		// variable name generator
+		std::unique_ptr<fgvm::NameGenerator> var = std::make_unique<fgvm::NameGenerator>();
+		// ir code generator
 		std::unique_ptr<IRSourceGenerator> generator = std::make_unique<IRSourceGenerator>();
+
+		// owns all statements
+		std::unique_ptr<fgvm::Module> module_owner = std::make_unique<fgvm::Module>();
+		// generates the statements
+		std::unique_ptr<fgvm::CodeBuilder> builder = std::make_unique<fgvm::CodeBuilder>(module_owner.get());
+
 		fgvm::Value* main_ptr = nullptr;
 
 		std::shared_ptr<BodyAST> parse();

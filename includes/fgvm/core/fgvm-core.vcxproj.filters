@@ -54,6 +54,9 @@
     <ClInclude Include="generator\Module.h">
       <Filter>generator</Filter>
     </ClInclude>
+    <ClInclude Include="generator\NameGenerator.h">
+      <Filter>generator</Filter>
+    </ClInclude>
     <ClInclude Include="generator\SourceGenerator.h">
       <Filter>generator</Filter>
     </ClInclude>
@@ -121,6 +124,9 @@
       <Filter>generator</Filter>
     </ClCompile>
     <ClCompile Include="generator\Module.cpp">
+      <Filter>generator</Filter>
+    </ClCompile>
+    <ClCompile Include="generator\NameGenerator.cpp">
       <Filter>generator</Filter>
     </ClCompile>
     <ClCompile Include="generator\SourceGenerator.cpp">
