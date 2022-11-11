@@ -99,6 +99,7 @@
     <ClInclude Include="fgvm.h" />
     <ClInclude Include="generator\CodeBuilder.h" />
     <ClInclude Include="generator\Module.h" />
+    <ClInclude Include="generator\NameGenerator.h" />
     <ClInclude Include="generator\SourceGenerator.h" />
     <ClInclude Include="generator\ir-generator\IRSourceGenerator.h" />
     <ClInclude Include="types\AtomicTypes.h" />
@@ -124,6 +125,7 @@
     <ClCompile Include="blocs\Loop.cpp" />
     <ClCompile Include="generator\CodeBuilder.cpp" />
     <ClCompile Include="generator\Module.cpp" />
+    <ClCompile Include="generator\NameGenerator.cpp" />
     <ClCompile Include="generator\SourceGenerator.cpp" />
     <ClCompile Include="generator\ir-generator\IRSourceGenerator.cpp" />
     <ClCompile Include="types\AtomicTypes.cpp" />

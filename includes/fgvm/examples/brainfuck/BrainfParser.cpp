@@ -44,8 +44,8 @@ std::shared_ptr<AST> Brainf_ck::BrainfParser::singlePass()
 Brainf_ck::BrainfParser::BrainfParser(std::vector<fgvm::Token>& tokens)
     : Parser(tokens)
 {
-    auto mem_size = builder->createValue("mem_size", new fgvm::U32(255));
-    main_ptr = builder->createAlloc("main_ptr", mem_size);
+    auto mem_size = builder->createValue(var->get("mem_size"), new fgvm::U32(255));
+    main_ptr = builder->createAlloc(var->get("main_ptr"), mem_size);
     program->addStmt(mem_size);
     program->addStmt(main_ptr);
 }
@@ -77,7 +77,7 @@ fgvm::Statement* Brainf_ck::BrainfParser::visit(std::shared_ptr<AST> ast)
 
 fgvm::Statement* Brainf_ck::BrainfParser::visit(std::shared_ptr<BodyAST> ast)
 {
-    fgvm::Bloc* bloc = builder->createBloc("bf_bloc");
+    fgvm::Bloc* bloc = builder->createBloc(var->get("bf_bloc"));
     for (auto& expr_ast : ast->expressions) {
         auto stmt = visit(expr_ast);
         if (stmt != nullptr)
@@ -90,30 +90,30 @@ fgvm::Statement* Brainf_ck::BrainfParser::visit(std::shared_ptr<MemAST> ast)
 {
     fgvm::Value* temp = nullptr;
     if (ast->go_left)
-        temp = builder->createIncr(main_ptr);
-    else
         temp = builder->createDecr(main_ptr);
+    else
+        temp = builder->createIncr(main_ptr);
     return temp;
 }
 
 fgvm::Statement* Brainf_ck::BrainfParser::visit(std::shared_ptr<OpAST> ast)
 {
-    fgvm::Bloc* temp_bloc = builder->createBloc("t_b");
+    fgvm::Bloc* temp_bloc = builder->createBloc(var->get("op_bloc"));
 
     // get current value
-    auto curr_val = builder->createGetValAddr("t_curr", main_ptr, fgvm::EType::Uint8);
+    auto curr_val = builder->createGetValAddr(var->get("curr_val"), main_ptr, fgvm::EType::Uint8);
     temp_bloc->addStmt(curr_val);
     
     // increment or decrement
     fgvm::Value* incr_or_decr = nullptr;
     if (ast->do_sub)
-        incr_or_decr = builder->createIncr(curr_val);
-    else
         incr_or_decr = builder->createDecr(curr_val);
+    else
+        incr_or_decr = builder->createIncr(curr_val);
     temp_bloc->addStmt(incr_or_decr);
 
     // set current value
-    auto set_val = builder->createSetValAddr("t_set", main_ptr, incr_or_decr);
+    auto set_val = builder->createSetValAddr(var->get("set_curr_val"), main_ptr, incr_or_decr);
     temp_bloc->addStmt(set_val);
 
 
@@ -122,16 +122,16 @@ fgvm::Statement* Brainf_ck::BrainfParser::visit(std::shared_ptr<OpAST> ast)
 
 fgvm::Statement* Brainf_ck::BrainfParser::visit(std::shared_ptr<LoopAST> ast)
 {
-    auto temp_bloc = builder->createBloc("temp_b");
+    auto temp_bloc = builder->createBloc(var->get("temp_b"));
     
-    auto curr_val = builder->createGetValAddr("curr_val", main_ptr, fgvm::EType::Uint8);
+    auto curr_val = builder->createGetValAddr(var->get("curr_val"), main_ptr, fgvm::EType::Uint8);
     temp_bloc->addStmt(curr_val);
 
-    auto loop_bloc = builder->createBloc("loop_bloc");
+    auto loop_bloc = builder->createBloc(var->get("loop_bloc"));
     // should probably cache this value but whatever
-    auto zero = builder->createValue("zero", new fgvm::U8(0));
+    auto zero = builder->createValue(var->get("zero"), new fgvm::U8(0));
     temp_bloc->addStmt(zero);
-    auto cond = builder->createCompEQ("comp", curr_val, zero);
+    auto cond = builder->createCompEQ(var->get("comp"), curr_val, zero);
     temp_bloc->addStmt(cond);
 
     auto loop = builder->createLoop(cond, loop_bloc);
