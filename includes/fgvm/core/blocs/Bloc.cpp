@@ -1,7 +1,5 @@
 #include "Bloc.h"
 
-
-
 fgvm::Bloc::Bloc(std::string name)
 {
     this->name = name;

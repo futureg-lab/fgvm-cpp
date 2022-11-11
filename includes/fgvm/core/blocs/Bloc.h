@@ -1,7 +1,8 @@
 #pragma once
-#include <queue>
 #include "../Statement.h"
 #include "../values/RetValue.h"
+
+#include <queue>
 
 namespace fgvm {
 	class Bloc : public Statement {
