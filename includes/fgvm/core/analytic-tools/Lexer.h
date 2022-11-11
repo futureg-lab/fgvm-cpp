@@ -1,11 +1,12 @@
 #pragma once
-#include <string>
-#include <vector>
-#include <memory>
-
 #include "Token.h"
 
+#include <string>
+#include <iostream>
+#include <vector>
+
 namespace fgvm {
+
 	class Lexer {
 	private:
 		char STOP_CHAR = '\0';

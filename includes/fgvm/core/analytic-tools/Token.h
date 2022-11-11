@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include "../utils/IRUtils.h"
 
 namespace fgvm {
 	struct CursorPosition {

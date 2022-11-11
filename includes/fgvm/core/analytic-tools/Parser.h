@@ -1,8 +1,10 @@
 #pragma once
-
 #include "Token.h"
 
+#include <vector>
+
 namespace fgvm {
+
 	class Parser {
 	private:
 		std::vector<Token> tokens;

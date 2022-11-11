@@ -1,4 +1,5 @@
 #include "Token.h"
+#include "../utils/IRUtils.h"
 
 void fgvm::Token::define(int type, std::string value, CursorPosition cursor, std::string description)
 {
