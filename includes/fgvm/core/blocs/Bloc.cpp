@@ -1,6 +1,5 @@
 #include "Bloc.h"
-
-
+#include "../utils/FGError.h"
 
 fgvm::Bloc::Bloc(std::string name)
 {

@@ -1,4 +1,5 @@
 #include "FArgValue.h"
+#include "../utils/FGError.h"
 
 // FArgs
 fgvm::FArgValue::FArgValue(std::string name, Type* content)

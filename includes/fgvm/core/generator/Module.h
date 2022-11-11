@@ -2,14 +2,10 @@
 #include <map>
 #include <string>
 #include <set>
-#include <unordered_map>
 
-#include "../values/Value.h"
-#include "../types/AtomicTypes.h"
+#include "../Statement.h"
 
 namespace fgvm {
-    class Statement;
-    class Value;
 
     class Module {
     private:

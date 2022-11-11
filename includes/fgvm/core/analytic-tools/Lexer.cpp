@@ -1,4 +1,8 @@
 #include "Lexer.h"
+#include "../utils/IRUtils.h"
+
+#include <memory>
+
 
 void fgvm::Lexer::nextChar()
 {

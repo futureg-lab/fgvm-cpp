@@ -1,5 +1,6 @@
 #include "Module.h"
 
+
 void fgvm::Module::addPool(Statement* ptr)
 {
 	this->ptr_pool.insert(ptr);

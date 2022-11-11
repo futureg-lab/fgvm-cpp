@@ -1,4 +1,5 @@
 #include "SARValue.h"
+#include "../utils/FGError.h"
 
 fgvm::SARValue::SARValue(std::string name, Type* content)
     : Value(name)

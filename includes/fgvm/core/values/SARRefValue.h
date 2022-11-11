@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../types/AtomicTypes.h"
 #include "Value.h"
+#include "../types/AtomicTypes.h"
 
 namespace fgvm {
     // %value_name = i32 single_arg

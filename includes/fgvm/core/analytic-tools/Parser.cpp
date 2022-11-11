@@ -1,5 +1,7 @@
 #include "Parser.h"
 
+#include "../utils/FGError.h"
+
 fgvm::Parser::Parser(std::vector<Token>& tokens)
     : tokens(tokens)
 {

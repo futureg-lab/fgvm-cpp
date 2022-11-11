@@ -1,11 +1,12 @@
 #pragma once
-#include <string>
-#include <vector>
-#include <memory>
-
 #include "Token.h"
 
+#include <string>
+#include <iostream>
+#include <vector>
+
 namespace fgvm {
+
 	class Lexer {
 	private:
 		char STOP_CHAR = '\0';
@@ -30,8 +31,8 @@ namespace fgvm {
 		static bool isStandardExpression(char character);
 		static std::logic_error tokenError(std::string reason, CursorPosition& pos, std::string filepath);
 
-		void nextChar();
-		char peekNextChar() const;
-		bool hasEnded() const;
+		virtual void nextChar();
+		virtual char peekNextChar() const;
+		virtual bool hasEnded() const;
 	};
 }

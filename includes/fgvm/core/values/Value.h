@@ -1,10 +1,9 @@
 #pragma once
 
-#include <string>
 #include "../Constants.h"
-#include "../utils/FGError.h"
-#include "../generator/Module.h"
 #include "../Statement.h"
+
+#include <string>
 
 namespace fgvm {
     class Value : public Statement {

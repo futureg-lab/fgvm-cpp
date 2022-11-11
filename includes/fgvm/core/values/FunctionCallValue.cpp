@@ -1,4 +1,5 @@
 #include "FunctionCallValue.h"
+#include "../utils/FGError.h"
 
 fgvm::FunctionCallValue::FunctionCallValue(std::string assign_name, std::string called_func_name, std::vector<Value*> arg_inputs)
 	: FunctionCustomCallValue(assign_name, called_func_name, arg_inputs, fgvm::EType::Void)

@@ -1,4 +1,5 @@
 #include "FunctionDef.h"
+#include "../utils/FGError.h"
 
 
 fgvm::FunctionDef::FunctionDef(std::string name, std::vector<FArgValue*> arguments, Bloc* bloc_def, EType ret_type)

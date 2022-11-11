@@ -1,4 +1,5 @@
 #include "CodeBuilder.h"
+#include "../utils/IRUtils.h"
 
 // private methods
 fgvm::Value* fgvm::CodeBuilder::createBinaryFunc(std::string fcall_name, std::string name, fgvm::Value* L, fgvm::Value* R)

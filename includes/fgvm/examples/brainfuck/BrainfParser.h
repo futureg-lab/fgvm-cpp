@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include "../../core/analytic-tools/Lexer.h"
 #include "../../core/analytic-tools/Parser.h"
 #include "../../core/generator/Module.h"
 #include "../../core/generator/CodeBuilder.h"
