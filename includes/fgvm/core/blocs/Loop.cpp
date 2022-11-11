@@ -1,4 +1,5 @@
 #include "Loop.h"
+#include "../utils/FGError.h"
 
 fgvm::Loop::Loop(Value* condition, Bloc* loop_bloc)
 {

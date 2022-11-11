@@ -1,4 +1,5 @@
 #include "FunctionCustomCallValue.h"
+#include "../utils/FGError.h"
 
 fgvm::FunctionCustomCallValue::FunctionCustomCallValue(
 	std::string assign_name, 

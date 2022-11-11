@@ -1,7 +1,6 @@
 #pragma once
 
-#include <vector>
-#include <memory>
+
 #include "../types/Type.h"
 #include "../utils/FGError.h"
 
@@ -18,7 +17,8 @@
 #include "../blocs/ConditionalBr.h"
 #include "../blocs/Loop.h"
 
-#include "../utils/IRUtils.h"
+#include <vector>
+#include <memory>
 
 namespace fgvm {
 	class CodeBuilder {

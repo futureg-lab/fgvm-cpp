@@ -1,4 +1,5 @@
 #include "ConditionalBr.h"
+#include "../utils/FGError.h"
 
 fgvm::ConditionalBr::ConditionalBr(Value* condition, Bloc* if_bloc, Bloc* else_bloc)
 {

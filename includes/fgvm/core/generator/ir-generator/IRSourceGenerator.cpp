@@ -1,5 +1,6 @@
 #include "IRSourceGenerator.h"
-
+#include <string>
+#include <string_view>
 
 std::string IRSourceGenerator::generate(fgvm::FArgValue* value)
 {
