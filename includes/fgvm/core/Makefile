@@ -75,6 +75,7 @@ OBJECTS := \
 	$(OBJDIR)/Loop.o \
 	$(OBJDIR)/CodeBuilder.o \
 	$(OBJDIR)/Module.o \
+	$(OBJDIR)/NameGenerator.o \
 	$(OBJDIR)/SourceGenerator.o \
 	$(OBJDIR)/IRSourceGenerator.o \
 	$(OBJDIR)/AtomicTypes.o \
@@ -174,6 +175,9 @@ $(OBJDIR)/CodeBuilder.o: generator/CodeBuilder.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Module.o: generator/Module.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/NameGenerator.o: generator/NameGenerator.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/SourceGenerator.o: generator/SourceGenerator.cpp
