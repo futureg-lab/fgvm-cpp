@@ -12,7 +12,7 @@ project "fgvm-examples"
 	}
 
    -- filters
-   filter "system:windows"
+	filter "system:windows"
 		systemversion "latest"
 		cppdialect "C++17"
 		staticruntime "On"
@@ -23,7 +23,7 @@ project "fgvm-examples"
 		cppdialect "C++17"
 		staticruntime "On"
 
-   filter "configurations:Debug"
+	filter "configurations:Debug"
 		runtime "Debug"
 		symbols "on"
 
