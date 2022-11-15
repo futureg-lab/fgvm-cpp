@@ -75,8 +75,8 @@ namespace fgvm {
 		fgvm::Loop* createLoop(fgvm::Value* condition, fgvm::Bloc* bloc);
 
 		// stdin and out
-		// TODO
-		// fgvm::SARValue* createStdout(std::string name, fgvm::Value* value);
-		// fgvm::SARValue* createStdin(std::string name, fgvm::SARRefValue* container);
+		fgvm::Value* createStdout(std::string name, fgvm::Value* value);
+		fgvm::Value* createStderr(std::string name, fgvm::Value* value);
+		fgvm::Value* createStdin(std::string name, fgvm::EType type_hint);
 	};
 }

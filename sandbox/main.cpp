@@ -187,7 +187,7 @@ void testLexer2() {
 void testLexerBrainfuck() {
     using namespace Brainf_ck;
     std::string file = "<sandbox>";
-    std::string source = "><++-[>++[>+<-]<-]+";
+    std::string source = "><++-.,[>++[>+<-]<-]+";
     // std::string source = "><++-+";
 
     BrainfLexer lexer(source, file);

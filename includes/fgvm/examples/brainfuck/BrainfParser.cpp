@@ -34,8 +34,14 @@ std::shared_ptr<AST> Brainf_ck::BrainfParser::singlePass()
     case TokenType::MINUS:
         ast = std::make_shared<OpAST>(true); // false == do_sub
         break;
-    case TokenType::LOOP_OPEN: // ] will automatically be handled
+    case TokenType::LOOP_OPEN: // ] will be automatically handled
         ast = handleLoopBlock();
+        break;
+    case TokenType::STD_IN:
+        ast = std::make_shared<IoAST>(false); // false == do getch()
+        break;
+    case TokenType::STD_OUT:
+        ast = std::make_shared<IoAST>(true);
         break;
     }
     return ast;
@@ -66,6 +72,9 @@ fgvm::Statement* Brainf_ck::BrainfParser::visit(std::shared_ptr<AST> ast)
         break;
     case ASTType::OP_ACTION_AST:
         statement = visit(std::static_pointer_cast<OpAST>(ast));
+        break;
+    case ASTType::IO_AST:
+        statement = visit(std::static_pointer_cast<IoAST>(ast));
         break;
     case ASTType::UNDEFINED_AST:
         throw FGError::notExpected("invalid expression id encountered");
@@ -140,6 +149,24 @@ fgvm::Statement* Brainf_ck::BrainfParser::visit(std::shared_ptr<LoopAST> ast)
         loop_bloc->addStmt(visit(expr));
     temp_bloc->addStmt(loop);
 
+    return temp_bloc;
+}
+
+fgvm::Statement* Brainf_ck::BrainfParser::visit(std::shared_ptr<IoAST> ast)
+{
+    auto temp_bloc = builder->createBloc(var->get("print_b"));
+    
+    auto curr_val = builder->createGetValAddr(var->get("curr_val"), main_ptr, fgvm::EType::Uint8);
+    temp_bloc->addStmt(curr_val);
+
+    if (ast->do_print) {
+        temp_bloc->addStmt(builder->createStdout(var->get("print"), curr_val));
+    } else {
+        auto print_or_scanf = builder->createStdin(var->get("scanf"), fgvm::EType::Uint8);
+        auto temp = builder->createSetValAddr("set_curr_val", main_ptr, print_or_scanf);
+        temp_bloc->addStmt(print_or_scanf);
+        temp_bloc->addStmt(temp);
+    }
     return temp_bloc;
 }
 

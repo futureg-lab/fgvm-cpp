@@ -35,7 +35,8 @@ fgvm::CodeBuilder::~CodeBuilder()
 }
 
 
-// public methods
+// Public methods
+
 fgvm::SARValue* fgvm::CodeBuilder::createValue(std::string name, fgvm::Type* content)
 {
 	auto value = new fgvm::SARValue(name, content);
@@ -248,4 +249,29 @@ fgvm::Loop* fgvm::CodeBuilder::createLoop(fgvm::Value* condition, fgvm::Bloc* bl
 	fgvm::Loop* loop = new fgvm::Loop(condition, bloc);
 	registerToModuleObjectPool(loop);
 	return loop;
+}
+
+
+// Standard I/O
+
+
+fgvm::Value* fgvm::CodeBuilder::createStdout(std::string name, fgvm::Value* value)
+{
+	auto fcustomcall = new fgvm::FunctionCustomCallValue(name, "stdout_print", { value }, fgvm::EType::Bool);
+	registerToModuleObjectPool(fcustomcall);
+	return fcustomcall;
+}
+
+fgvm::Value* fgvm::CodeBuilder::createStderr(std::string name, fgvm::Value* value)
+{
+	auto fcustomcall = new fgvm::FunctionCustomCallValue(name, "stderr_print", { value }, fgvm::EType::Bool);
+	registerToModuleObjectPool(fcustomcall);
+	return fcustomcall;
+}
+
+fgvm::Value* fgvm::CodeBuilder::createStdin(std::string name, fgvm::EType type_hint)
+{
+	auto fcustomcall = new fgvm::FunctionCustomCallValue(name, "stderr_out", {}, type_hint);
+	registerToModuleObjectPool(fcustomcall);
+	return fcustomcall;
 }

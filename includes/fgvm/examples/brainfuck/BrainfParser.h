@@ -20,6 +20,7 @@ namespace Brainf_ck {
 	struct MemAST;
 	struct OpAST;
 	struct LoopAST;
+	struct IoAST;
 
 	class BrainfParser : public fgvm::Parser {
 	private:
@@ -49,13 +50,14 @@ namespace Brainf_ck {
 		fgvm::Statement* visit(std::shared_ptr<MemAST> ast);
 		fgvm::Statement* visit(std::shared_ptr<OpAST> ast);
 		fgvm::Statement* visit(std::shared_ptr<LoopAST> ast);
+		fgvm::Statement* visit(std::shared_ptr<IoAST> ast);
 
 		std::string compileToIntermediateCode() override;
 	private:
 		std::shared_ptr<LoopAST> handleLoopBlock();
 	};
 
-	enum ASTType { UNDEFINED_AST = -1, BODY_AST, MEM_ACTION_AST, OP_ACTION_AST, LOOP_AST };
+	enum ASTType { UNDEFINED_AST = -1, BODY_AST, MEM_ACTION_AST, OP_ACTION_AST, LOOP_AST, IO_AST };
 	
 	struct AST {
 		ASTType type = UNDEFINED_AST;
@@ -93,6 +95,14 @@ namespace Brainf_ck {
 		LoopAST() {
 			type = LOOP_AST;
 			body = std::make_shared<BodyAST>();
+		}
+	};
+
+	struct IoAST : public AST {
+		bool do_print = false;
+		IoAST(bool do_print) {
+			type = IO_AST;
+			this->do_print = do_print;
 		}
 	};
 }
