@@ -202,7 +202,7 @@ void testLexerBrainfuck() {
     std::cout << IRUtils::prettifyIRSourceCode(ir_code);
 }
 
-void testStateùentSeq() {
+void testStatementSeq() {
     auto test = builder->createStmtSequence();
     test->add(builder->createValue("456", new U8(123)));
     test->add(builder->createValue("456", new U8(123)));
