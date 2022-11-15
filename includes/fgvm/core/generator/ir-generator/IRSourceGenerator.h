@@ -12,6 +12,9 @@ private:
 	std::string INDENT = "   ";
 
 public:
+	// Statement sequence
+	std::string generate(fgvm::StatementSequence* stmt_seq) override;
+
 	// values
 	
 	// Idea : (T3 %a1, T3 %a2, T3 %a3, ..., TN aN)

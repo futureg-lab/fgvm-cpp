@@ -35,7 +35,8 @@ fgvm::CodeBuilder::~CodeBuilder()
 }
 
 
-// public methods
+// Public methods
+
 fgvm::SARValue* fgvm::CodeBuilder::createValue(std::string name, fgvm::Type* content)
 {
 	auto value = new fgvm::SARValue(name, content);
@@ -226,6 +227,13 @@ fgvm::FunctionDef* fgvm::CodeBuilder::createFunc(std::string name, std::vector<f
 	return def;
 }
 
+fgvm::StatementSequence* fgvm::CodeBuilder::createStmtSequence()
+{
+	auto seq = new fgvm::StatementSequence();
+	registerToModuleObjectPool(seq);
+	return seq;
+}
+
 fgvm::Bloc* fgvm::CodeBuilder::createBloc(std::string name)
 {
 	fgvm::Bloc* bloc = new fgvm::Bloc(name);
@@ -237,8 +245,8 @@ fgvm::ConditionalBr* fgvm::CodeBuilder::createIF(fgvm::Value* condition, fgvm::B
 {
 	fgvm::ConditionalBr* cond = new fgvm::ConditionalBr(condition, if_bloc, else_bloc);
 	registerToModuleObjectPool(cond);
-	FGError::NOT_NULL(cond->true_bloc);
-	FGError::NOT_NULL(cond->condition);
+	if (cond->condition == nullptr)
+		throw FGError::notExpected("if condition is not defined");
 	// FGError::NOT_NULL(cond->else_bloc);
 	return cond;
 }
@@ -248,4 +256,29 @@ fgvm::Loop* fgvm::CodeBuilder::createLoop(fgvm::Value* condition, fgvm::Bloc* bl
 	fgvm::Loop* loop = new fgvm::Loop(condition, bloc);
 	registerToModuleObjectPool(loop);
 	return loop;
+}
+
+
+// Standard I/O
+
+
+fgvm::Value* fgvm::CodeBuilder::createStdout(std::string name, fgvm::Value* value)
+{
+	auto fcustomcall = new fgvm::FunctionCustomCallValue(name, "stdout_print", { value }, fgvm::EType::Bool);
+	registerToModuleObjectPool(fcustomcall);
+	return fcustomcall;
+}
+
+fgvm::Value* fgvm::CodeBuilder::createStderr(std::string name, fgvm::Value* value)
+{
+	auto fcustomcall = new fgvm::FunctionCustomCallValue(name, "stderr_print", { value }, fgvm::EType::Bool);
+	registerToModuleObjectPool(fcustomcall);
+	return fcustomcall;
+}
+
+fgvm::Value* fgvm::CodeBuilder::createStdin(std::string name, fgvm::EType type_hint)
+{
+	auto fcustomcall = new fgvm::FunctionCustomCallValue(name, "stderr_out", {}, type_hint);
+	registerToModuleObjectPool(fcustomcall);
+	return fcustomcall;
 }

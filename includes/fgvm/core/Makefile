@@ -66,6 +66,7 @@ endif
 
 OBJECTS := \
 	$(OBJDIR)/Statement.o \
+	$(OBJDIR)/StatementSequence.o \
 	$(OBJDIR)/Lexer.o \
 	$(OBJDIR)/Parser.o \
 	$(OBJDIR)/Token.o \
@@ -148,6 +149,9 @@ $(OBJECTS): | $(OBJDIR)
 endif
 
 $(OBJDIR)/Statement.o: Statement.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/StatementSequence.o: StatementSequence.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Lexer.o: analytic-tools/Lexer.cpp
