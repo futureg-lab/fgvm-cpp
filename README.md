@@ -1,6 +1,6 @@
 # fgvm-cpp
 FutureG-lab Virtual Machine : LLVM wannabe programming language parser/compiler generator (IR code generation, JIT compilation, specific target compilation)
-* Main goal is to built a easy to use compiler builder with a better developer experience.
+* Main goal is to build a easy to use compiler builder with a better developer experience.
 
 # Roadmap for creating a programming language with fgvm 
 ```
