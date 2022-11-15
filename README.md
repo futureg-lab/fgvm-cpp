@@ -2,12 +2,14 @@
 FutureG-lab Virtual Machine : LLVM wannabe programming language parser/compiler generator (IR code generation, JIT compilation, specific target compilation)
 * Main goal is to build a easy to use compiler builder with a better developer experience.
 
-# Roadmap for creating a programming language with fgvm 
+# Creating a programming language with fgvm 
 ```
 Source code ---> Lexer/Tokenizer ---> Parser ---> Intermediate code compilation (fgvm IR) ---> Linking ---> Interpret / JIT or Compilation to a specific target assembly : x86, ARM, WASM
 ```
 
-# fgvm IR v1 description
+# fgvm IR v1
+
+## Description
 1. fgvm IR is designed so that each line of code represents a single atomic assignement (literal assignement or function call) that holds a strongly typed value, a bloc definition or a function definition.
 2. Any generated fgvm IR code is designed for parsers and compilers, not for humans !
 3. The current spec supports external symbols for linking purposes and prebuilt functions, the syntax is also very minimalistic, `%var_name`, `func_name`, `@some_keyword`.
