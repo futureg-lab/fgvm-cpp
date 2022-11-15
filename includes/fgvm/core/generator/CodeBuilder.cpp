@@ -278,7 +278,7 @@ fgvm::Value* fgvm::CodeBuilder::createStderr(std::string name, fgvm::Value* valu
 
 fgvm::Value* fgvm::CodeBuilder::createStdin(std::string name, fgvm::EType type_hint)
 {
-	auto fcustomcall = new fgvm::FunctionCustomCallValue(name, "stderr_out", {}, type_hint);
+	auto fcustomcall = new fgvm::FunctionCustomCallValue(name, "stderr_print", {}, type_hint);
 	registerToModuleObjectPool(fcustomcall);
 	return fcustomcall;
 }
