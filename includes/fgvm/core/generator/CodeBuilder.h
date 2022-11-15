@@ -16,6 +16,7 @@
 #include "../blocs/FunctionDef.h"
 #include "../blocs/ConditionalBr.h"
 #include "../blocs/Loop.h"
+#include "../StatementSequence.h"
 
 #include <vector>
 #include <memory>
@@ -70,6 +71,7 @@ namespace fgvm {
 
 		// bloc
 		fgvm::FunctionDef* createFunc(std::string name, std::vector<fgvm::FArgValue*> args, fgvm::Bloc* bloc, fgvm::EType exp_ret_type);
+		fgvm::StatementSequence* createStmtSequence();
 		fgvm::Bloc* createBloc(std::string name);
 		fgvm::ConditionalBr* createIF(fgvm::Value* condition, fgvm::Bloc* if_bloc, fgvm::Bloc* else_bloc);
 		fgvm::Loop* createLoop(fgvm::Value* condition, fgvm::Bloc* bloc);

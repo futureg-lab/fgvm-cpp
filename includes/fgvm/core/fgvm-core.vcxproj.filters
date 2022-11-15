@@ -26,6 +26,7 @@
   <ItemGroup>
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Statement.h" />
+    <ClInclude Include="StatementSequence.h" />
     <ClInclude Include="analytic-tools\Lexer.h">
       <Filter>analytic-tools</Filter>
     </ClInclude>
@@ -99,6 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Statement.cpp" />
+    <ClCompile Include="StatementSequence.cpp" />
     <ClCompile Include="analytic-tools\Lexer.cpp">
       <Filter>analytic-tools</Filter>
     </ClCompile>

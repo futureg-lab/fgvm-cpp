@@ -2,6 +2,16 @@
 #include <string>
 #include <string_view>
 
+std::string IRSourceGenerator::generate(fgvm::StatementSequence* stmt_seq)
+{
+	std::vector<std::string> lines;
+	auto statements = stmt_seq->getSequence();
+	for (auto stmt : statements)
+		lines.push_back(dynamic_cast<SourceGenerator*>(this)->generate(stmt));
+
+	return IRUtils::join(lines, INSTR_SEPARATOR);
+}
+
 std::string IRSourceGenerator::generate(fgvm::FArgValue* value)
 {
 	std::string type = IRUtils::enumTypeToStr(value->content->getTypeId());
@@ -27,7 +37,7 @@ std::string IRSourceGenerator::generate(fgvm::FunctionCustomCallValue* value)
 
 std::string IRSourceGenerator::generate(fgvm::RetValue* value)
 {
-	std::string src = "ret {0} %{1}";
+	std::string src = "@ret {0} %{1}";
 	std::string type = IRUtils::enumTypeToStr(value->expectedReductionTypeID());
 
 	return IRUtils::format(
@@ -109,7 +119,7 @@ std::string IRSourceGenerator::generate(fgvm::ConditionalBr* if_stmt)
 
 std::string IRSourceGenerator::generate(fgvm::FunctionDef* fn_stmt)
 {
-	std::string src = "@defun {0} %{1} ({2}) {3}\n{4}";
+	std::string src = "@defun {0} {1} ({2}) {3}\n{4}";
 	std::string ret_type = IRUtils::enumTypeToStr(fn_stmt->ret_type);
 	std::string f_name = fn_stmt->name;
 

@@ -52,8 +52,8 @@ Brainf_ck::BrainfParser::BrainfParser(std::vector<fgvm::Token>& tokens)
 {
     auto mem_size = builder->createValue(var->get("mem_size"), new fgvm::U32(255));
     main_ptr = builder->createAlloc(var->get("main_ptr"), mem_size);
-    program->addStmt(mem_size);
-    program->addStmt(main_ptr);
+    program->add(mem_size);
+    program->add(main_ptr);
 }
 
 fgvm::Statement* Brainf_ck::BrainfParser::visit(std::shared_ptr<AST> ast)
@@ -86,13 +86,13 @@ fgvm::Statement* Brainf_ck::BrainfParser::visit(std::shared_ptr<AST> ast)
 
 fgvm::Statement* Brainf_ck::BrainfParser::visit(std::shared_ptr<BodyAST> ast)
 {
-    fgvm::Bloc* bloc = builder->createBloc(var->get("bf_bloc"));
+    fgvm::StatementSequence* seq = builder->createStmtSequence();
     for (auto& expr_ast : ast->expressions) {
         auto stmt = visit(expr_ast);
         if (stmt != nullptr)
-            bloc->addStmt(stmt);
+            seq->add(stmt);
     }
-    return bloc;
+    return seq;
 }
 
 fgvm::Statement* Brainf_ck::BrainfParser::visit(std::shared_ptr<MemAST> ast)
@@ -107,11 +107,11 @@ fgvm::Statement* Brainf_ck::BrainfParser::visit(std::shared_ptr<MemAST> ast)
 
 fgvm::Statement* Brainf_ck::BrainfParser::visit(std::shared_ptr<OpAST> ast)
 {
-    fgvm::Bloc* temp_bloc = builder->createBloc(var->get("op_bloc"));
+    fgvm::StatementSequence* seq = builder->createStmtSequence();
 
     // get current value
     auto curr_val = builder->createGetValAddr(var->get("curr_val"), main_ptr, fgvm::EType::Uint8);
-    temp_bloc->addStmt(curr_val);
+    seq->add(curr_val);
     
     // increment or decrement
     fgvm::Value* incr_or_decr = nullptr;
@@ -119,66 +119,66 @@ fgvm::Statement* Brainf_ck::BrainfParser::visit(std::shared_ptr<OpAST> ast)
         incr_or_decr = builder->createDecr(curr_val);
     else
         incr_or_decr = builder->createIncr(curr_val);
-    temp_bloc->addStmt(incr_or_decr);
+    seq->add(incr_or_decr);
 
     // set current value
     auto set_val = builder->createSetValAddr(var->get("set_curr_val"), main_ptr, incr_or_decr);
-    temp_bloc->addStmt(set_val);
+    seq->add(set_val);
 
 
-    return temp_bloc;
+    return seq;
 }
 
 fgvm::Statement* Brainf_ck::BrainfParser::visit(std::shared_ptr<LoopAST> ast)
 {
-    auto temp_bloc = builder->createBloc(var->get("temp_b"));
+    auto seq = builder->createStmtSequence();
     
     auto curr_val = builder->createGetValAddr(var->get("curr_val"), main_ptr, fgvm::EType::Uint8);
-    temp_bloc->addStmt(curr_val);
+    seq->add(curr_val);
 
     auto loop_bloc = builder->createBloc(var->get("loop_bloc"));
     // should probably cache this value but whatever
     auto zero = builder->createValue(var->get("zero"), new fgvm::U8(0));
-    temp_bloc->addStmt(zero);
+    seq->add(zero);
     auto cond = builder->createCompEQ(var->get("comp"), curr_val, zero);
-    temp_bloc->addStmt(cond);
+    seq->add(cond);
 
     auto loop = builder->createLoop(cond, loop_bloc);
     // populate loop_bloc
     for (auto& expr : ast->body->expressions)
         loop_bloc->addStmt(visit(expr));
-    temp_bloc->addStmt(loop);
+    seq->add(loop);
 
-    return temp_bloc;
+    return seq;
 }
 
 fgvm::Statement* Brainf_ck::BrainfParser::visit(std::shared_ptr<IoAST> ast)
 {
-    auto temp_bloc = builder->createBloc(var->get("print_b"));
+    auto seq = builder->createStmtSequence();
     
     auto curr_val = builder->createGetValAddr(var->get("curr_val"), main_ptr, fgvm::EType::Uint8);
-    temp_bloc->addStmt(curr_val);
+    seq->add(curr_val);
 
     if (ast->do_print) {
-        temp_bloc->addStmt(builder->createStdout(var->get("print"), curr_val));
+        seq->add(builder->createStdout(var->get("print"), curr_val));
     } else {
         auto print_or_scanf = builder->createStdin(var->get("scanf"), fgvm::EType::Uint8);
         auto temp = builder->createSetValAddr("set_curr_val", main_ptr, print_or_scanf);
-        temp_bloc->addStmt(print_or_scanf);
-        temp_bloc->addStmt(temp);
+        seq->add(print_or_scanf);
+        seq->add(temp);
     }
-    return temp_bloc;
+    return seq;
 }
 
 // 
 std::string Brainf_ck::BrainfParser::compileToIntermediateCode()
 {
     std::shared_ptr<BodyAST> ast = parse();
-    fgvm::Statement* stmt = visit((ast));
+    fgvm::Statement* stmt = visit(ast);
 
-    auto bloc = dynamic_cast<fgvm::Bloc*>(stmt);
+    auto seq = dynamic_cast<fgvm::StatementSequence*>(stmt);
+    program->add(seq);
 
-    program->addStmt(bloc);
     return generator->generate(program);
 }
 

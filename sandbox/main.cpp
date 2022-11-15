@@ -148,7 +148,7 @@ void testFunc() {
     auto fdef = builder->createFunc("someFunc", args, bloc, EType::Int32);
 
     IRSourceGenerator generator;
-    std::cout << generator.generate(fdef);
+    std::cout << IRUtils::prettifyIRSourceCode(generator.generate(fdef));
 }
 
 
@@ -187,19 +187,43 @@ void testLexer2() {
 void testLexerBrainfuck() {
     using namespace Brainf_ck;
     std::string file = "<sandbox>";
-    std::string source = "><++-.,[>++[>+<-]<-]+";
+    std::string source = "+++[>+++++[>+++++<-]<-]>>----------.+++++.+++++++.----.++.----------.";
     // std::string source = "><++-+";
 
     BrainfLexer lexer(source, file);
     auto tokens = lexer.tokenize();
-    std::cout << "N tokens " << tokens.size() << std::endl;
-    for (auto& token : tokens) {
-        std::cout << token.to_string() << std::endl;
-    }
+    // std::cout << "N tokens " << tokens.size() << std::endl;
+    // for (auto& token : tokens)
+    //    std::cout << token.to_string() << std::endl;
 
     BrainfParser parser(tokens);
     std::string ir_code = parser.compileToIntermediateCode();
 
+    std::cout << IRUtils::prettifyIRSourceCode(ir_code);
+}
+
+void testStateùentSeq() {
+    auto test = builder->createStmtSequence();
+    test->add(builder->createValue("456", new U8(123)));
+    test->add(builder->createValue("456", new U8(123)));
+    test->add(builder->createValue("123", new U8(123)));
+
+    auto bloc = builder->createBloc("hey");
+    bloc->addStmt(builder->createValue("789", new U8(123)));
+    bloc->addStmt(builder->createValue("245", new U8(123)));
+    bloc->addStmt(builder->createValue("111", new U8(123)));
+    test->add(bloc);
+
+    auto test2 = builder->createStmtSequence();
+    test2->add(builder->createValue("_test2", new U8(123)));
+    auto test3 = builder->createStmtSequence();
+    test3->add(builder->createValue("_test3", new U8(123)));
+
+    test->add(test2);
+    test->add(test3);
+
+    IRSourceGenerator generator;
+    std::string ir_code = generator.generate(test);
     std::cout << IRUtils::prettifyIRSourceCode(ir_code);
 }
 
@@ -219,17 +243,17 @@ int main()
 {
     try {
         // sandbox2();
-        // testFunc();
+        testFunc();
         // testLexer1();
         // testLexer2();
-        testLexerBrainfuck();
+        // testLexerBrainfuck();
         // testNameGenerator();
     }
-    catch (std::logic_error err) {
+    catch (std::logic_error& err) {
         std::cerr << "Oups !\n";
         std::cerr << "Logic error : " << err.what();
     }
-    catch (std::exception err) {
+    catch (std::exception& err) {
         std::cerr << "Exception : " << err.what();
     }
     return 0;

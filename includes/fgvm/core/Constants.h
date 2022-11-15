@@ -31,6 +31,7 @@ namespace fgvm {
     enum EStatementType {
         FunDefStmt,
         ValueStmt,
+        SequenceStmt,
         BlocStmt,
         IfStmt,
         LoopStmt

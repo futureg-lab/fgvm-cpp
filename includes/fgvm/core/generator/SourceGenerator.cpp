@@ -18,6 +18,9 @@ std::string SourceGenerator::generate(fgvm::Statement* statement)
 	case fgvm::EStatementType::LoopStmt:
 		src = generate(dynamic_cast<fgvm::Loop*>(statement));
 		break;
+	case fgvm::EStatementType::SequenceStmt:
+		src = generate(dynamic_cast<fgvm::StatementSequence*>(statement));
+		break;
 	case fgvm::EStatementType::FunDefStmt:
 		src = generate(dynamic_cast<fgvm::FunctionDef*>(statement));
 		break;

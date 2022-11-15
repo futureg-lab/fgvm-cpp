@@ -39,7 +39,7 @@ namespace Brainf_ck {
 		std::shared_ptr<BodyAST> parse();
 		std::shared_ptr<AST> singlePass();
 	public:
-		fgvm::Bloc* program = builder->createBloc("entry_point");
+		fgvm::StatementSequence* program = builder->createStmtSequence();
 		
 
 		BrainfParser(std::vector<fgvm::Token>& tokens);

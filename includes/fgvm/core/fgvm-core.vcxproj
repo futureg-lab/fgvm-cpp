@@ -89,6 +89,7 @@
   <ItemGroup>
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Statement.h" />
+    <ClInclude Include="StatementSequence.h" />
     <ClInclude Include="analytic-tools\Lexer.h" />
     <ClInclude Include="analytic-tools\Parser.h" />
     <ClInclude Include="analytic-tools\Token.h" />
@@ -116,6 +117,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Statement.cpp" />
+    <ClCompile Include="StatementSequence.cpp" />
     <ClCompile Include="analytic-tools\Lexer.cpp" />
     <ClCompile Include="analytic-tools\Parser.cpp" />
     <ClCompile Include="analytic-tools\Token.cpp" />

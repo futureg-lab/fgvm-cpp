@@ -81,7 +81,7 @@ std::string IRUtils::prettifyIRSourceCode(std::string source)
         if (indent < 0)
             FGError::notExpected("invalid IR code, encountered a \"}\" without \"{\"");
         std::string cumul_space = "";
-        for (int i = 0; i < indent; i++, cumul_space += "  ");
+        for (int i = 0; i < indent; i++, cumul_space += "    ");
         output += cumul_space + line + "\n";
         if (line.find('{') != std::string::npos)
             indent++;
