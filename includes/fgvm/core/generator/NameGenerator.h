@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../utils/FGError.h"
+
 #include <unordered_set>
 #include <unordered_map>
 #include <string>
@@ -12,6 +14,9 @@ namespace fgvm {
 	public:
 		// Returns a unique name based on name
 		std::string get(std::string name);
+
+		// Returns the latest version of a name
+		std::string latest(std::string name);
 
 		// Returns true if the name has been emitted
 		bool exist(std::string name);

@@ -17,6 +17,7 @@ namespace fgvm {
     class U8 : public Type {
     public:
         U8();
+        ~U8();
         U8(uint8_t value);
         std::string storedValueAsString() const override;
     };
@@ -24,6 +25,7 @@ namespace fgvm {
     class U16 : public Type {
     public:
         U16();
+        ~U16();
         U16(uint16_t value);
         std::string storedValueAsString() const override;
     };
@@ -31,6 +33,7 @@ namespace fgvm {
     class U32 : public Type {
     public:
         U32();
+        ~U32();
         U32(uint32_t value);
         std::string storedValueAsString() const override;
     };
@@ -38,6 +41,7 @@ namespace fgvm {
     class U64 : public Type {
     public:
         U64();
+        ~U64();
         U64(uint64_t value);
         std::string storedValueAsString() const override;
     };
@@ -50,6 +54,7 @@ namespace fgvm {
     class I8 : public Type {
     public:
         I8();
+        ~I8();
         I8(int8_t value);
         std::string storedValueAsString() const override;
     };
@@ -57,6 +62,7 @@ namespace fgvm {
     class I16 : public Type {
     public:
         I16();
+        ~I16();
         I16(int16_t value);
         std::string storedValueAsString() const override;
     };
@@ -64,6 +70,7 @@ namespace fgvm {
     class I32 : public Type {
     public:
         I32();
+        ~I32();
         I32(int32_t value);
         std::string storedValueAsString() const override;
     };
@@ -71,6 +78,7 @@ namespace fgvm {
     class I64 : public Type {
     public:
         I64();
+        ~I64();
         I64(int64_t value);
         std::string storedValueAsString() const override;
     };
@@ -83,6 +91,7 @@ namespace fgvm {
     class F32 : public Type {
     public:
         F32();
+        ~F32();
         F32(float value);
         std::string storedValueAsString() const override;
     };
@@ -90,6 +99,7 @@ namespace fgvm {
     class F64 : public Type {
     public:
         F64();
+        ~F64();
         F64(double value);
         std::string storedValueAsString() const override;
     };
@@ -98,6 +108,7 @@ namespace fgvm {
     class BOOL : public Type {
     public:
         BOOL();
+        ~BOOL();
         BOOL(bool value);
         std::string storedValueAsString() const override;
     };
@@ -106,6 +117,7 @@ namespace fgvm {
     class STR : public Type {
     public:
         STR();
+        ~STR();
         STR(const char* value);
         std::string storedValueAsString() const override;
     };
@@ -114,6 +126,7 @@ namespace fgvm {
     class VOID : public Type {
     public:
         VOID();
+        ~VOID();
         std::string storedValueAsString() const override;
     };
 }

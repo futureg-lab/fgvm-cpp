@@ -11,6 +11,11 @@ fgvm::U8::U8()
 {
 }
 
+fgvm::U8::~U8()
+{
+	IRUtils::cleanupVoidPointer<uint8_t>(stored_value);
+}
+
 // Uint8
 fgvm::U8::U8(uint8_t value)
 	: Type(8, EType::Uint8)
@@ -30,6 +35,11 @@ fgvm::U16::U16()
 {
 }
 
+fgvm::U16::~U16()
+{
+	IRUtils::cleanupVoidPointer<uint16_t>(stored_value);
+}
+
 fgvm::U16::U16(uint16_t value)
 	: Type(16, EType::Uint16)
 {
@@ -45,6 +55,11 @@ std::string fgvm::U16::storedValueAsString() const
 fgvm::U32::U32()
 	: Type(32, EType::Uint16)
 {
+}
+
+fgvm::U32::~U32()
+{
+	IRUtils::cleanupVoidPointer<uint32_t>(stored_value);
 }
 
 fgvm::U32::U32(uint32_t value)
@@ -66,6 +81,11 @@ fgvm::U64::U64()
 {
 }
 
+fgvm::U64::~U64()
+{
+	IRUtils::cleanupVoidPointer<uint64_t>(stored_value);
+}
+
 fgvm::U64::U64(uint64_t value)
 	: Type(64, EType::Uint64)
 {
@@ -82,6 +102,11 @@ std::string fgvm::U64::storedValueAsString() const
 fgvm::I8::I8()
 	: Type(8, EType::Int8)
 {
+}
+
+fgvm::I8::~I8()
+{
+	IRUtils::cleanupVoidPointer<int8_t>(stored_value);
 }
 
 fgvm::I8::I8(int8_t value)
@@ -102,6 +127,11 @@ fgvm::I16::I16()
 {
 }
 
+fgvm::I16::~I16()
+{
+	IRUtils::cleanupVoidPointer<int16_t>(stored_value);
+}
+
 fgvm::I16::I16(int16_t value)
 	: Type(16, EType::Int16)
 {
@@ -117,6 +147,11 @@ std::string fgvm::I16::storedValueAsString() const
 fgvm::I32::I32()
 	: Type(32, EType::Int32)
 {
+}
+
+fgvm::I32::~I32()
+{
+	IRUtils::cleanupVoidPointer<int32_t>(stored_value);
 }
 
 fgvm::I32::I32(int32_t value)
@@ -137,6 +172,11 @@ fgvm::I64::I64()
 {
 }
 
+fgvm::I64::~I64()
+{
+	IRUtils::cleanupVoidPointer<int64_t>(stored_value);
+}
+
 fgvm::I64::I64(int64_t value)
 	: Type(64, EType::Int64)
 {
@@ -152,6 +192,11 @@ std::string fgvm::I64::storedValueAsString() const
 fgvm::F32::F32()
 	: Type(32, EType::Float32)
 {
+}
+
+fgvm::F32::~F32()
+{
+	IRUtils::cleanupVoidPointer<float>(stored_value);
 }
 
 fgvm::F32::F32(float value)
@@ -172,6 +217,11 @@ fgvm::F64::F64()
 {
 }
 
+fgvm::F64::~F64()
+{
+	IRUtils::cleanupVoidPointer<double>(stored_value);
+}
+
 fgvm::F64::F64(double value)
 	: Type(64, EType::Float64)
 {
@@ -190,6 +240,11 @@ fgvm::BOOL::BOOL()
 {
 }
 
+fgvm::BOOL::~BOOL()
+{
+	IRUtils::cleanupVoidPointer<bool>(stored_value);
+}
+
 fgvm::BOOL::BOOL(bool value)
 	: Type(1, EType::Bool)
 {
@@ -206,6 +261,11 @@ std::string fgvm::BOOL::storedValueAsString() const
 fgvm::STR::STR()
 	: Type(0, EType::Str)
 {
+}
+
+fgvm::STR::~STR()
+{
+	IRUtils::cleanupVoidPointer<const char*>(stored_value);
 }
 
 fgvm::STR::STR(const char* value)
@@ -231,6 +291,10 @@ fgvm::VOID::VOID()
 	: Type(0, EType::Void)
 {
 	stored_value = nullptr;
+}
+
+fgvm::VOID::~VOID()
+{
 }
 
 std::string fgvm::VOID::storedValueAsString() const

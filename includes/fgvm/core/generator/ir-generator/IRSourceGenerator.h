@@ -2,6 +2,10 @@
 
 #include "../SourceGenerator.h"
 
+#include "../NameGenerator.h"
+#include "../../utils/FGError.h"
+
+#include <memory>
 
 class IRSourceGenerator : public SourceGenerator 
 {
@@ -11,6 +15,7 @@ private:
 	std::string INSTR_SEPARATOR = "\n";
 	std::string INDENT = "   ";
 
+	std::unique_ptr<fgvm::NameGenerator> sym_name = std::make_unique<fgvm::NameGenerator>();
 public:
 	// Statement sequence
 	std::string generate(fgvm::StatementSequence* stmt_seq) override;
@@ -21,9 +26,9 @@ public:
 	// Example : i64 %x, i32 %y, str %z
 	std::string generate(fgvm::FArgValue* value) override;
 
-	// Idea : %var_name = out_type [$]fname arg1 arg2 ... arg3
+	// Idea : %var_name = out_type fname arg1 arg2 ... arg3
 	// Example 1 : %x = i32 add %z %y
-	// Example 2 : %x = str $custom_fmt %my_str %my_val
+	// Example 2 : %x = str custom_fmt %my_str %my_val
 	// Supports FunctionCustomCallValue and FunctionCallValue
 	std::string generate(fgvm::FunctionCustomCallValue* value) override;
 

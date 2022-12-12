@@ -33,6 +33,9 @@ namespace IRUtils {
 
     template<typename T>
     void* makePointerOutOf(T value);
+
+    template<typename T>
+    void cleanupVoidPointer(void* value);
 }
 
 template<typename T>
@@ -56,4 +59,12 @@ void* IRUtils::makePointerOutOf(T value)
     T* addr = (T*) malloc(sizeof(T));
     addr[0] = value;
     return (void*)addr;
+}
+
+template<typename T>
+void IRUtils::cleanupVoidPointer(void* value)
+{
+    if (value == nullptr)
+        return;
+    delete static_cast<T*>(value);
 }

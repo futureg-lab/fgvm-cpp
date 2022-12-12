@@ -137,6 +137,7 @@ void testFunc() {
     bloc->addStmt(off__ref);
     bloc->addStmt(set_ref);
     bloc->addStmt(res_div);
+    bloc->addStmt(test_bool);
     bloc->addStmt(if_stmt);
     bloc->addStmt(compare);
     bloc->addStmt(loop_stmt);
@@ -151,6 +152,22 @@ void testFunc() {
     std::cout << IRUtils::prettifyIRSourceCode(generator.generate(fdef));
 }
 
+void testVariables() {
+    using namespace fgvm;
+
+
+    auto seq = builder->createStmtSequence();
+
+    auto x = builder->createValue("x", new I32(1));
+    auto y = builder->createValue("y", new I32(2));
+    auto x1 = builder->createValue("x", new I32(1234));
+
+
+    seq->setSequence({ x, y, x1 });
+
+    IRSourceGenerator generator;
+    std::cout << IRUtils::prettifyIRSourceCode(generator.generate(seq));
+}
 
 void testLexer1() {
     class CustomLexer : public Lexer {
@@ -243,10 +260,11 @@ int main()
 {
     try {
         // sandbox2();
-        testFunc();
+        // testFunc();
         // testLexer1();
         // testLexer2();
-        // testLexerBrainfuck();
+        testLexerBrainfuck();
+        // testVariables();
         // testNameGenerator();
     }
     catch (std::logic_error& err) {

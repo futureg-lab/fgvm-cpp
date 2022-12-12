@@ -1,9 +1,9 @@
 #pragma once
-#include <map>
-#include <string>
-#include <set>
 
 #include "../Statement.h"
+
+#include <string>
+#include <set>
 
 namespace fgvm {
 
@@ -12,7 +12,6 @@ namespace fgvm {
         std::set<Statement*> ptr_pool;
     public:
         void addPool(Statement* ptr);
-
         unsigned long long getId();
         ~Module();
     };
