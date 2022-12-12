@@ -161,9 +161,10 @@ void testVariables() {
     auto x = builder->createValue("x", new I32(1));
     auto y = builder->createValue("y", new I32(2));
     auto x1 = builder->createValue("x", new I32(1234));
+    auto x2 = builder->createAdd("x", x, y);
 
 
-    seq->setSequence({ x, y, x1 });
+    seq->setSequence({ x, y, x1, x2 });
 
     IRSourceGenerator generator;
     std::cout << IRUtils::prettifyIRSourceCode(generator.generate(seq));
@@ -263,8 +264,8 @@ int main()
         // testFunc();
         // testLexer1();
         // testLexer2();
-        testLexerBrainfuck();
-        // testVariables();
+        // testLexerBrainfuck();
+        testVariables();
         // testNameGenerator();
     }
     catch (std::logic_error& err) {

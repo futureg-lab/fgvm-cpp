@@ -15,7 +15,7 @@ std::string IRSourceGenerator::generate(fgvm::StatementSequence* stmt_seq)
 std::string IRSourceGenerator::generate(fgvm::FArgValue* value)
 {
 	std::string type = IRUtils::enumTypeToStr(value->content->getTypeId());
-	return IRUtils::format("{0} {1}", {type, sym_name->latest(value->name)});
+	return IRUtils::format("{0} {1}", {type, value->name});
 }
 
 std::string IRSourceGenerator::generate(fgvm::FunctionCustomCallValue* value)
@@ -25,13 +25,13 @@ std::string IRSourceGenerator::generate(fgvm::FunctionCustomCallValue* value)
 
 	std::vector<std::string> input_chunk;
 	for (auto input : value->arg_inputs)
-		input_chunk.push_back("%" + sym_name->latest(input->name));
+		input_chunk.push_back("%" + input->name);
 
 	std::string in_str = IRUtils::join(input_chunk, SEPARATOR);
 
 	return IRUtils::format(
 		src,
-		{ sym_name->get(value->name), type, sym_name->latest(value->called_func_name), in_str }
+		{ value->name, type, value->called_func_name, in_str }
 	);
 }
 
@@ -42,7 +42,7 @@ std::string IRSourceGenerator::generate(fgvm::RetValue* value)
 
 	return IRUtils::format(
 		src,
-		{ type, sym_name->latest(value->content->name) }
+		{ type, value->content->name }
 	);
 }
 
@@ -53,7 +53,7 @@ std::string IRSourceGenerator::generate(fgvm::SARRefValue* value)
 
 	return IRUtils::format(
 		src,
-		{ sym_name->get(value->name), type, sym_name->latest(value->derefValue()->name) }
+		{ value->name, type, value->derefValue()->name }
 	);
 }
 
@@ -66,7 +66,7 @@ std::string IRSourceGenerator::generate(fgvm::SARValue* value)
 		stored_value = "\"" + stored_value + "\"";
 	return IRUtils::format(
 		src,
-		{ sym_name->get(value->name), type, stored_value }
+		{ value->name, type, stored_value }
 	);
 }
 
@@ -95,7 +95,7 @@ std::string IRSourceGenerator::generate(fgvm::ConditionalBr* if_stmt)
 {
 	std::string src = "@if %{0} {1} @else {2}\n{3}";
 
-	std::string cond_var = sym_name->latest(if_stmt->condition->name);
+	std::string cond_var = if_stmt->condition->name;
 	auto true_bloc = if_stmt->true_bloc;
 	auto else_bloc = if_stmt->else_bloc;
 
@@ -121,7 +121,7 @@ std::string IRSourceGenerator::generate(fgvm::FunctionDef* fn_stmt)
 {
 	std::string src = "@defun {0} {1} ({2}) {3}\n{4}";
 	std::string ret_type = IRUtils::enumTypeToStr(fn_stmt->ret_type);
-	std::string f_name = sym_name->get(fn_stmt->name);
+	std::string f_name = fn_stmt->name;
 
 	std::vector<std::string> arg_vec;
 	for (auto arg : fn_stmt->arguments)
@@ -140,7 +140,7 @@ std::string IRSourceGenerator::generate(fgvm::FunctionDef* fn_stmt)
 std::string IRSourceGenerator::generate(fgvm::Loop* loop_stmt)
 {
 	std::string src = "@loop %{0} {1}\n{2}";
-	std::string cond_var = sym_name->latest(loop_stmt->condition->name);
+	std::string cond_var = loop_stmt->condition->name;
 	std::string bloc_name = loop_stmt->loop_bloc->name;
 	std::string l_bloc = generate(loop_stmt->loop_bloc);
 	return IRUtils::format(

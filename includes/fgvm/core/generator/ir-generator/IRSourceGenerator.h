@@ -14,8 +14,6 @@ private:
 	std::string ARG_SEP = ", ";
 	std::string INSTR_SEPARATOR = "\n";
 	std::string INDENT = "   ";
-
-	std::unique_ptr<fgvm::NameGenerator> sym_name = std::make_unique<fgvm::NameGenerator>();
 public:
 	// Statement sequence
 	std::string generate(fgvm::StatementSequence* stmt_seq) override;
