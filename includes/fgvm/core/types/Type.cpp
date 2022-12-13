@@ -1,5 +1,9 @@
 #include "Type.h"
 
+fgvm::Type::Type()
+{
+}
+
 fgvm::Type::Type(size_t total_bits, EType type_id)
 {
 	this->total_bits = total_bits;
@@ -14,4 +18,9 @@ fgvm::EType fgvm::Type::getTypeId() const
 size_t fgvm::Type::totalBits() const
 {
 	return total_bits;
+}
+
+std::string fgvm::Type::storedValueAsString()
+{
+	return stored_value;
 }

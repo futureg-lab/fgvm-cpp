@@ -11,6 +11,7 @@ unsigned long long fgvm::Module::getId()
 	return rand();
 }
 
+
 fgvm::Module::~Module()
 {
 	for (auto ptr : ptr_pool)

@@ -21,8 +21,8 @@ std::unique_ptr<CodeBuilder> builder = std::make_unique<CodeBuilder>(mod_contain
 
 void sandbox1()
 {
-    Value* x = builder->createValue("xxx", new I64(6));
-    Value* y = builder->createValue("yyy", new I64(13));
+    Value* x = builder->createValue("xxx", I64(6));
+    Value* y = builder->createValue("yyy", I64(13));
 
     Value* add_res = builder->createAdd("m_res", x, y);
 
@@ -31,15 +31,15 @@ void sandbox1()
     SARValue* xx = (SARValue*)x;
     std::cout
         << "name : " << xx->name << "\n"
-        << "type : " << IRUtils::enumTypeToStr(xx->content->getTypeId()) << "\n"
-        << "args : " << xx->content->storedValueAsString() << "\n\n";
+        << "type : " << IRUtils::enumTypeToStr(xx->content.getTypeId()) << "\n"
+        << "args : " << xx->content.storedValueAsString() << "\n\n";
 
 
     SARValue* yy = (SARValue*)y;
     std::cout
         << "name : " << yy->name << "\n"
-        << "type : " << IRUtils::enumTypeToStr(yy->content->getTypeId()) << "\n"
-        << "args : " << yy->content->storedValueAsString() << "\n\n";
+        << "type : " << IRUtils::enumTypeToStr(yy->content.getTypeId()) << "\n"
+        << "args : " << yy->content.storedValueAsString() << "\n\n";
 
     std::cout
         << "name : " << v_add->name << "\n"
@@ -73,11 +73,11 @@ void sandbox2()
 {
     using namespace fgvm;
     auto generator = new IRSourceGenerator();
-    auto s1 = builder->createValue("x", new I32(2));
+    auto s1 = builder->createValue("x", I32(2));
     auto s2 = builder->createGetAddrOf("y", s1);
     auto ret = builder->createReturn(s2);
 
-    auto s_add = builder->createAdd("res", builder->createValue("a", new I32(4)), builder->createValue("b", new I32(7)));
+    auto s_add = builder->createAdd("res", builder->createValue("a", I32(4)), builder->createValue("b", I32(7)));
 
     std::cout << ((SourceGenerator*)generator)->generate(s1) << std::endl;
     std::cout << ((SourceGenerator*)generator)->generate(s2) << std::endl;
@@ -93,32 +93,32 @@ void testFunc() {
         builder->createArg("y", EType::Int32)
     };
     
-    auto s1 = builder->createValue("test", new I32(8));
-    auto s2 = builder->createValue("test2", new I32(9));
-    auto s3 = builder->createValue("ok", new STR("All ok!"));
+    auto s1 = builder->createValue("test", I32(8));
+    auto s2 = builder->createValue("test2", I32(9));
+    auto s3 = builder->createValue("ok", STR("All ok!"));
     auto s4 = builder->createGetAddrOf("m_ref", s3);
     auto s5 = builder->createGetValAddr("deref", s4); 
     auto res_div = builder->createDiv("res_div", args[0], args[1]);
     auto ret_val = builder->createReturn(res_div);
 
     // test custom call
-    auto alloc_size = builder->createValue("alloc_size", new U32(6));
+    auto alloc_size = builder->createValue("alloc_size", U32(6));
     auto alloc_mem = builder->createAlloc("alloc", alloc_size);
     auto set_ref = builder->createSetValAddr("same_ref", alloc_mem, s1);
-    auto suppose_i_am_anything = builder->createValue("something", new I32(1234));
+    auto suppose_i_am_anything = builder->createValue("something", I32(1234));
     auto off__ref = builder->createSetValAddr("same_ref", alloc_mem, suppose_i_am_anything);
 
     // test bool if and loop
 
     // if statement
-    auto test_bool = builder->createValue("m_bool", new BOOL(false));
+    auto test_bool = builder->createValue("m_bool", BOOL(false));
     auto if_bloc = builder->createBloc("if_bloc");
-    if_bloc->addStmt(builder->createValue("m_bool", new BOOL(false)));
+    if_bloc->addStmt(builder->createValue("m_bool", BOOL(false)));
     auto if_stmt = builder->createIF(test_bool, if_bloc, nullptr);
     // loop
     auto loop_bloc = builder->createBloc("loop_bloc");
-    auto to_incr = builder->createValue("temp_i", new U32(0));
-    auto max_val = builder->createValue("max_val", new U32(10));
+    auto to_incr = builder->createValue("temp_i", U32(0));
+    auto max_val = builder->createValue("max_val", U32(10));
     auto compare = builder->createCompLT("less_t", to_incr, max_val);
     loop_bloc->addStmt(builder->createIncr(max_val));
     loop_bloc->addStmt(compare);
@@ -137,6 +137,7 @@ void testFunc() {
     bloc->addStmt(off__ref);
     bloc->addStmt(set_ref);
     bloc->addStmt(res_div);
+    bloc->addStmt(test_bool);
     bloc->addStmt(if_stmt);
     bloc->addStmt(compare);
     bloc->addStmt(loop_stmt);
@@ -151,6 +152,23 @@ void testFunc() {
     std::cout << IRUtils::prettifyIRSourceCode(generator.generate(fdef));
 }
 
+void testVariables() {
+    using namespace fgvm;
+
+
+    auto seq = builder->createStmtSequence();
+
+    auto x = builder->createValue("x", I32(1));
+    auto y = builder->createValue("y", I32(2));
+    auto x1 = builder->createValue("x", I32(1234));
+    auto x2 = builder->createAdd("x", x, y);
+
+
+    seq->setSequence({ x, y, x1, x2 });
+
+    IRSourceGenerator generator;
+    std::cout << IRUtils::prettifyIRSourceCode(generator.generate(seq));
+}
 
 void testLexer1() {
     class CustomLexer : public Lexer {
@@ -204,20 +222,20 @@ void testLexerBrainfuck() {
 
 void testStatementSeq() {
     auto test = builder->createStmtSequence();
-    test->add(builder->createValue("456", new U8(123)));
-    test->add(builder->createValue("456", new U8(123)));
-    test->add(builder->createValue("123", new U8(123)));
+    test->add(builder->createValue("456", U8(123)));
+    test->add(builder->createValue("456", U8(123)));
+    test->add(builder->createValue("123", U8(123)));
 
     auto bloc = builder->createBloc("hey");
-    bloc->addStmt(builder->createValue("789", new U8(123)));
-    bloc->addStmt(builder->createValue("245", new U8(123)));
-    bloc->addStmt(builder->createValue("111", new U8(123)));
+    bloc->addStmt(builder->createValue("789", U8(123)));
+    bloc->addStmt(builder->createValue("245", U8(123)));
+    bloc->addStmt(builder->createValue("111", U8(123)));
     test->add(bloc);
 
     auto test2 = builder->createStmtSequence();
-    test2->add(builder->createValue("_test2", new U8(123)));
+    test2->add(builder->createValue("_test2", U8(123)));
     auto test3 = builder->createStmtSequence();
-    test3->add(builder->createValue("_test3", new U8(123)));
+    test3->add(builder->createValue("_test3", U8(123)));
 
     test->add(test2);
     test->add(test3);
@@ -243,10 +261,11 @@ int main()
 {
     try {
         // sandbox2();
-        testFunc();
+        // testFunc();
         // testLexer1();
         // testLexer2();
         // testLexerBrainfuck();
+        testVariables();
         // testNameGenerator();
     }
     catch (std::logic_error& err) {

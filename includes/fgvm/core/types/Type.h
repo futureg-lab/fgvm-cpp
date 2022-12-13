@@ -9,12 +9,13 @@ namespace fgvm {
     // to interrogate it's type id
     class Type {
     public:
-        void* stored_value = nullptr;
+        std::string stored_value = "__undefined__";
+        Type();
         Type(size_t total_bits, EType type_id);
         EType getTypeId() const;
         size_t totalBits() const;
 
-        virtual std::string storedValueAsString() const = 0;
+        virtual std::string storedValueAsString();
     private:
         size_t total_bits = 0;
         EType type_id = EType::Unknown;

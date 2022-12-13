@@ -33,7 +33,10 @@ namespace fgvm {
 		CodeBuilder(fgvm::Module* module_container);
 		~CodeBuilder();
 
-		fgvm::SARValue* createValue(std::string name, fgvm::Type* content);
+
+		void SSRNamePass(fgvm::StatementSequence* sequence);
+
+		fgvm::SARValue* createValue(std::string name, fgvm::Type content);
 		fgvm::FArgValue* createArg(std::string name, fgvm::EType type_hint_id);
 
 		// handling memory
