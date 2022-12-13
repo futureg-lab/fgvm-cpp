@@ -50,7 +50,7 @@ std::shared_ptr<AST> Brainf_ck::BrainfParser::singlePass()
 Brainf_ck::BrainfParser::BrainfParser(std::vector<fgvm::Token>& tokens)
     : Parser(tokens)
 {
-    auto mem_size = builder->createValue(var->get("mem_size"), new fgvm::U32(255));
+    auto mem_size = builder->createValue(var->get("mem_size"), fgvm::U32(255));
     main_ptr = builder->createAlloc(var->get("main_ptr"), mem_size);
     program->add(mem_size);
     program->add(main_ptr);
@@ -138,7 +138,7 @@ fgvm::Statement* Brainf_ck::BrainfParser::visit(std::shared_ptr<LoopAST> ast)
 
     auto loop_bloc = builder->createBloc(var->get("loop_bloc"));
     // should probably cache this value but whatever
-    auto zero = builder->createValue(var->get("zero"), new fgvm::U8(0));
+    auto zero = builder->createValue(var->get("zero"), fgvm::U8(0));
     seq->add(zero);
     auto cond = builder->createCompEQ(var->get("comp"), curr_val, zero);
     seq->add(cond);

@@ -10,6 +10,7 @@ namespace fgvm {
     class Type {
     public:
         std::string stored_value = "__undefined__";
+        Type();
         Type(size_t total_bits, EType type_id);
         EType getTypeId() const;
         size_t totalBits() const;

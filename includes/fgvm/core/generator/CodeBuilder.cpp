@@ -36,7 +36,7 @@ fgvm::CodeBuilder::~CodeBuilder()
 
 // Public methods
 
-fgvm::SARValue* fgvm::CodeBuilder::createValue(std::string name, fgvm::Type* content)
+fgvm::SARValue* fgvm::CodeBuilder::createValue(std::string name, fgvm::Type content)
 {
 	auto value = new fgvm::SARValue(name, content);
 	registerToModuleObjectPool(value);

@@ -1,5 +1,9 @@
 #include "Type.h"
 
+fgvm::Type::Type()
+{
+}
+
 fgvm::Type::Type(size_t total_bits, EType type_id)
 {
 	this->total_bits = total_bits;

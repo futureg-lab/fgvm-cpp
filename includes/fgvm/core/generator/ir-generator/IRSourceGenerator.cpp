@@ -61,7 +61,7 @@ std::string IRSourceGenerator::generate(fgvm::SARValue* value)
 {
 	std::string src = "%{0} = {1} {2}";
 	std::string type = IRUtils::enumTypeToStr(value->expectedReductionTypeID());
-	std::string stored_value = value->content->storedValueAsString();
+	std::string stored_value = value->content.storedValueAsString();
 	if (value->expectedReductionTypeID() == fgvm::EType::Str)
 		stored_value = "\"" + stored_value + "\"";
 	return IRUtils::format(
