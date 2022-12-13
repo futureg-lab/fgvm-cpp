@@ -34,7 +34,6 @@ fgvm::CodeBuilder::~CodeBuilder()
 {
 }
 
-
 // Public methods
 
 fgvm::SARValue* fgvm::CodeBuilder::createValue(std::string name, fgvm::Type* content)

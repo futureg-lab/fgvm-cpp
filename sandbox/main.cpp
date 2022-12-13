@@ -264,8 +264,8 @@ int main()
         // testFunc();
         // testLexer1();
         // testLexer2();
-        // testLexerBrainfuck();
-        testVariables();
+        testLexerBrainfuck();
+        // testVariables();
         // testNameGenerator();
     }
     catch (std::logic_error& err) {

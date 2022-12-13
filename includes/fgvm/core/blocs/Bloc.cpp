@@ -6,12 +6,12 @@ fgvm::Bloc::Bloc(std::string name)
     this->name = name;
 }
 
-void fgvm::Bloc::setStmt(std::queue<Statement*> statements)
+void fgvm::Bloc::setStmt(std::vector<Statement*> statements)
 {
     this->statements = statements;
 }
 
-std::queue<fgvm::Statement*> fgvm::Bloc::getStmt() const
+std::vector<fgvm::Statement*> fgvm::Bloc::getStmt() const
 {
     return statements;
 }
@@ -24,7 +24,7 @@ void fgvm::Bloc::addStmt(Statement* stmt)
         if (value->valueTypeID() == fgvm::EValueType::ReturnID)
             throw std::logic_error("Cannot add return object to statment list, use setRetValue instead");
     }
-    statements.push(stmt);
+    statements.push_back(stmt);
 }
 
 fgvm::RetValue* fgvm::Bloc::getRetValue() const

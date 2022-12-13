@@ -74,12 +74,10 @@ std::string IRSourceGenerator::generate(fgvm::Bloc* bloc)
 {
 	std::string src = "@bloc {0}: {\n{1}\n}";
 	std::vector<std::string> body_str;
-	std::queue<fgvm::Statement*> qstmt = bloc->getStmt();
-	while (!qstmt.empty()) {
-		auto item = qstmt.front();
-		body_str.push_back(dynamic_cast<SourceGenerator*>(this)->generate(item));
-		qstmt.pop();
-	}
+	std::vector<fgvm::Statement*> qstmt = bloc->getStmt();
+
+	for (auto item_ptr : qstmt)
+		body_str.push_back(dynamic_cast<SourceGenerator*>(this)->generate(item_ptr));
 
 	auto ret_value = bloc->getRetValue();
 	if (ret_value)

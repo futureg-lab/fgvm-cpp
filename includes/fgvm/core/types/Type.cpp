@@ -15,3 +15,8 @@ size_t fgvm::Type::totalBits() const
 {
 	return total_bits;
 }
+
+std::string fgvm::Type::storedValueAsString()
+{
+	return stored_value;
+}
